@@ -1,2 +1,2 @@
-# YAY
-Yet Another YACS
+# RUST
+Rust Utilizing Spotify Tracker
