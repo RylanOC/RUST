@@ -1,0 +1,4 @@
+# Rustfmt is used for automatic code formatting.
+
+# Unstable currently
+#merge_imports = true

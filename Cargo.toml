@@ -1,9 +1,24 @@
 [package]
-name = "RUST"
+name = "rust-utilizing-spotify-tracker"
 version = "0.1.0"
-authors = ["Rylan <rylanoc@gmail.com>"]
+authors = [
+    "Rylan <rylanoc@gmail.com>",
+    "Antonia \"Nia\" Calia-Bogan <acaliabogan@acaliabogan.dev>"
+]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
+#reqwest = "~0.10"
+#serde = "~1.0"
+handlebars = "~3"
+
+# Actix stuff
+actix-rt = "1.0.0"
+actix-web = "2.0.0"
+actix-files = "~0.2"
+#actix-session = "~0.3" # Cookies and session info.
+
+# Logger
+env_logger = "0.7.1"
+log = "0.4.8"
