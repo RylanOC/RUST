@@ -5,8 +5,11 @@ mod web;
 
 #[macro_use] extern crate actix_web;
 #[macro_use] extern crate log;
+#[macro_use] extern crate serde_derive;
+#[macro_use] extern crate lazy_static;
 
 const BIND_TO: &'static str = "127.0.0.1:8000";
+const LOG_LEVEL: &'static str = "info";
 
 use std::{env, io};
 
@@ -19,9 +22,9 @@ use crate::web::is_up;
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
-    env::set_var("RUST_LOG", "main");
+    env::set_var("RUST_LOG", LOG_LEVEL);
     env_logger::init();
-    info!("logger started.");
+    info!("Starting up.");
 
     HttpServer::new(||
         App::new()
