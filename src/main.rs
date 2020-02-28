@@ -14,7 +14,7 @@ const LOG_LEVEL: &'static str = "info";
 use std::{env, io};
 
 use actix_files as afs;
-use actix_web::{HttpServer, App, middleware, web as a_web};
+use actix_web::{HttpServer, App, middleware, web as a_web, HttpResponse};
 
 use handlebars::Handlebars;
 
@@ -28,7 +28,7 @@ async fn main() -> io::Result<()> {
 
     let mut h = Handlebars::new();
     h.set_strict_mode(true);
-    h.register_templates_directory(".hbs", "static").unwrap();
+    h.register_templates_directory(".hbs", "templates").unwrap();
     let handlebars_ref = a_web::Data::new(h);
     info!("Handlebars templates registered.");
 
@@ -36,10 +36,11 @@ async fn main() -> io::Result<()> {
         App::new()
             .wrap(middleware::Logger::default())
                 // logger should always be last middleware added.
-            .data(handlebars_ref.clone())
-            .service(a_web::resource("/is_up").get().to(is_up))
-            // `.get()` is a Guard -- requires GET request otherwise return 405-Method Not Allowed
-            .default_service(a_web::resource("").to(p404))
+            .app_data(handlebars_ref.clone())
+            .service(afs::Files::new("static/", "static/"))
+            .service(a_web::resource("/is_up").to(is_up))
+            .service(a_web::resource("/").to(index))
+            .default_service(a_web::route().to(|| HttpResponse::NotFound()))
     ).bind(BIND_TO)?
         .run()
         .await
