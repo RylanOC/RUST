@@ -9,6 +9,10 @@ pub struct Curtain {
     pub title: String,
     /// Smaller subtitle under the title.
     pub subtitle: String,
+    /// Is there a button
+    pub has_button: String,
+    /// What does the button
+    pub button_text: String,
 }
 
 impl Curtain {
@@ -29,9 +33,16 @@ impl Curtain {
         self
     }
 
-    /// Builder pattern function to set the subtitle in this curtain/
+    /// Builder pattern function to set the subtitle in this curtain.
     pub fn subtitle(mut self, sub: impl Into<String>) -> Self {
         self.subtitle = sub.into();
+        self
+    }
+
+    /// Builder pattern function to set the button in this curtain.
+    pub fn button(mut self, button: impl Into<String>) -> Self {
+        self.has_button = "true".to_string();
+        self.button_text = button.into();
         self
     }
 

@@ -8,7 +8,7 @@ mod web;
 #[macro_use] extern crate serde_derive;
 //#[macro_use] extern crate lazy_static;
 
-const BIND_TO: &'static str = "127.0.0.1:8000";
+const BIND_TO: &'static str = "127.0.0.1:8888";
 const LOG_LEVEL: &'static str = "info";
 
 use std::{env, io};
@@ -40,6 +40,8 @@ async fn main() -> io::Result<()> {
             .service(afs::Files::new("static/", "static/"))
             .service(a_web::resource("/is_up").to(is_up))
             .service(a_web::resource("/").to(index))
+            .service(a_web::resource("/login").to(login))
+            .service(a_web::resource("/callback").to(callback))
             .default_service(a_web::route().to(|| HttpResponse::NotFound()))
     ).bind(BIND_TO)?
         .run()
