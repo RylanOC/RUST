@@ -3,7 +3,8 @@ name = "rust-utilizing-spotify-tracker"
 version = "0.1.0"
 authors = [
     "Rylan <rylanoc@gmail.com>",
-    "Antonia \"Nia\" Calia-Bogan <acaliabogan@acaliabogan.dev>"
+    "Antonia \"Nia\" Calia-Bogan <acaliabogan@acaliabogan.dev>",
+    "Gabe Maayan <gabemgem@gmail.com>"
 ]
 edition = "2018"
 
@@ -23,3 +24,5 @@ log = "0.4.8"
 # Serialization/Deserialization
 serde = "~1"
 serde_derive = "~1"
+# Random number generator
+rand = "0.7.3"
