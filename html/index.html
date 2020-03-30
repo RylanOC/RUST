@@ -1,0 +1,57 @@
+<!-- html sheet for RUST application 
+	 author: Mary Montgomery
+	 date: 30 March 2020			-->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset = "UTF-8">
+		<title> "R U S T" </title>	
+		<link rel = "stylesheet" href = "style.css">
+		<style>
+			body {background-color: black;}
+
+		</style>	
+	</head>
+
+	<body>
+	<!-- first we put in the RUST logo -->
+	<img src="rust_logo_expanded.png" width = 60% height = 50% class = left>
+	<br>
+	<br>
+	<br>
+	<!-- a description of the site, can comment out if we dont think we need it     c5e8fa    -->
+	<div>
+		<h5 style= "font-size: 18pt;"> R U S T is a data visualization tool that shows the user some of their Spotify listening habits.</h5> 
+	</div>
+	<br>
+	<br>
+	<br>
+	<!-- a description of the music button selection -->
+	<div>
+		<h3> See what you've been listening to: </h3>
+	</div>
+	<!-- display the music button selections -->
+	<div style="margin:50px;"">
+		<!-- right now these are of type button, we will need to add js to define what happens with each button later -->
+		<!-- we could also change this page to be a form page and make these buttons be submit buttons -->
+		<button type="button" class="artist music-button">ARTISTS</button>
+		<button type="button" class="song music-button">SONGS</button>
+		<button type="button" class="album music-button">ALBUMS</button>
+		<button type="button" class="genre music-button">GENRES</button>
+	</div>
+	<br>
+	<br>
+	<br>
+	<!-- a description of the time button selection -->
+	<div>
+		<h3> Through what time frame: </h3>
+	</div>
+	<!-- display the time button selections -->
+	<div style="margin:50px;">
+		<button type="button" class="short-term time-button">SHORT TERM</button>
+		<button type="button" class="medium-term time-button">MEDIUM TERM</button>
+		<button type="button" class="long-term time-button">LONG TERM</button>
+	</div>
+	
+	</body>
+</html>
