@@ -3,10 +3,12 @@
 mod templates;
 mod web;
 
-#[macro_use] extern crate actix_web;
-#[macro_use] extern crate log;
-#[macro_use] extern crate serde_derive;
-//#[macro_use] extern crate lazy_static;
+// #[macro_use] extern crate actix_web;
+#[macro_use]
+extern crate log;
+#[macro_use]
+extern crate serde_derive;
+// #[macro_use] extern crate lazy_static;
 
 const BIND_TO: &'static str = "127.0.0.1:8888";
 const LOG_LEVEL: &'static str = "info";
@@ -14,7 +16,7 @@ const LOG_LEVEL: &'static str = "info";
 use std::{env, io};
 
 use actix_files as afs;
-use actix_web::{HttpServer, App, middleware, web as a_web, HttpResponse};
+use actix_web::{middleware, web as a_web, App, HttpResponse, HttpServer};
 
 use handlebars::Handlebars;
 
@@ -32,10 +34,10 @@ async fn main() -> io::Result<()> {
     let handlebars_ref = a_web::Data::new(h);
     info!("Handlebars templates registered.");
 
-    HttpServer::new(move ||
+    HttpServer::new(move || {
         App::new()
             .wrap(middleware::Logger::default())
-                // logger should always be last middleware added.
+            // logger should always be last middleware added.
             .app_data(handlebars_ref.clone())
             .service(afs::Files::new("static/", "static/"))
             .service(a_web::resource("/is_up").to(is_up))
@@ -43,7 +45,8 @@ async fn main() -> io::Result<()> {
             .service(a_web::resource("/login").to(login))
             .service(a_web::resource("/callback").to(callback))
             .default_service(a_web::route().to(|| HttpResponse::NotFound()))
-    ).bind(BIND_TO)?
-        .run()
-        .await
+    })
+    .bind(BIND_TO)?
+    .run()
+    .await
 }
