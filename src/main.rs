@@ -16,11 +16,16 @@ const LOG_LEVEL: &'static str = "info";
 use std::{env, io};
 
 use actix_files as afs;
-use actix_web::{middleware, web as a_web, App, HttpResponse, HttpServer};
+use actix_web::{middleware, web as a_web, App, HttpResponse, HttpServer, client::Client};
 
 use handlebars::Handlebars;
 
 use crate::web::*;
+
+struct AppState {
+    client: Client,
+    client_id: String,
+}
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
@@ -39,14 +44,17 @@ async fn main() -> io::Result<()> {
             .wrap(middleware::Logger::default())
             // logger should always be last middleware added.
             .app_data(handlebars_ref.clone())
+            .data(AppState {
+                client: Client::default(),
+                client_id: String::from("1de388fded5c43b68f60fcec9a81c956"), // maybe figure out a way to not hard code this
+            })
             .service(afs::Files::new("static/", "static/"))
             .service(a_web::resource("/is_up").to(is_up))
             .service(a_web::resource("/").to(index))
             .service(a_web::resource("/login").to(login))
             .service(a_web::resource("/callback").to(callback))
             .default_service(a_web::route().to(|| HttpResponse::NotFound()))
-    })
-    .bind(BIND_TO)?
-    .run()
-    .await
+    }).bind(BIND_TO)?
+        .run()
+        .await
 }
