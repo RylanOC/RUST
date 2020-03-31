@@ -159,6 +159,5 @@ p {
 /*we want our images to be 100% width and auto height*/
 .img {
   max-width: 100%;
-  max-height: auto;
   /*max-width: 50vw;*/
 }
