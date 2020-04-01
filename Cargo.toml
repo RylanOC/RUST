@@ -11,14 +11,12 @@ edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [dependencies]
-#lazy_static = "1.4"
 # Handlebars templating
 handlebars = {version="3.0.1", features=["dir_source"]}
 # Actix stuff
 actix-rt = "1.0.0"
 actix-web = "2.0.0"
 actix-files = "~0.2"
-#actix-session = "~0.3" # Cookies and session info.
 # Logger
 env_logger = "0.7.1"
 log = "0.4.8"

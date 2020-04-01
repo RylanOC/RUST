@@ -2,6 +2,8 @@
 
 mod templates;
 mod web;
+mod app;
+mod spotify;
 
 // #[macro_use] extern crate actix_web;
 #[macro_use]
@@ -12,20 +14,18 @@ extern crate serde_derive;
 
 const BIND_TO: &'static str = "127.0.0.1:8888";
 const LOG_LEVEL: &'static str = "info";
+const CLIENT_ID: &'static str = "1de388fded5c43b68f60fcec9a81c956";
 
 use std::{env, io};
 
 use actix_files as afs;
-use actix_web::{middleware, web as a_web, App, HttpResponse, HttpServer, client::Client};
+use actix_web::{middleware, web as a_web, App, HttpResponse, HttpServer};
 
 use handlebars::Handlebars;
 
 use crate::web::*;
-
-struct AppState {
-    client: Client,
-    client_id: String,
-}
+use crate::app::AppState;
+use std::sync::Arc;
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
@@ -36,18 +36,14 @@ async fn main() -> io::Result<()> {
     let mut h = Handlebars::new();
     h.set_strict_mode(true);
     h.register_templates_directory(".hbs", "templates").unwrap();
-    let handlebars_ref = a_web::Data::new(h);
+    let data = AppState::new(Arc::new(h));
     info!("Handlebars templates registered.");
 
     HttpServer::new(move || {
         App::new()
             .wrap(middleware::Logger::default())
             // logger should always be last middleware added.
-            .app_data(handlebars_ref.clone())
-            .data(AppState {
-                client: Client::default(),
-                client_id: String::from("1de388fded5c43b68f60fcec9a81c956"), // maybe figure out a way to not hard code this
-            })
+            .data(data.clone())
             .service(afs::Files::new("static/", "static/"))
             .service(a_web::resource("/is_up").to(is_up))
             .service(a_web::resource("/").to(index))
