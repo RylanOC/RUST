@@ -14,6 +14,11 @@ use std::io::ErrorKind;
 use crate::{AppState, CLIENT_ID};
 use crate::spotify::PersonalizationData;
 
+use regex::Regex;
+
+lazy_static!{ static ref QUERY_REGEX: Regex = Regex::new("code=(.+)").unwrap(); }
+
+
 /// Generates a random string of length `l`, of any capital letters, lowercase letters,
 /// and numbers.
 pub async fn generate_random_string(l: usize) -> String {
@@ -64,13 +69,17 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpRespons
     let hbs_reg = &app_data.template_registry;
     match *req.method() {
         Method::GET => {
-            let auth_code = req.uri().query();
-            info!("{:?}", auth_code);
+            let query = req.uri().query();
             let artists: Option<String> = None;
             let tracks: Option<String> = None;
-            if auth_code.is_some() {
+            let re: &Regex = &QUERY_REGEX;
+            let code = query
+                .and_then(|q| re.captures(q))
+                .and_then(|caps| caps.get(0))
+                .map(|re_match| re_match.as_str());
+            if code.is_some() {
                 let client = ClientBuilder::new()
-                    .header("Authorization", auth_code.unwrap())
+                    .header("Authorization", code.unwrap())
                     .finish();
                 let code = auth_code.unwrap();
                 client.get(PersonalizationData::Tracks.get_endpoint().to_string());

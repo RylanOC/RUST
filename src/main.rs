@@ -8,9 +8,12 @@ mod spotify;
 // #[macro_use] extern crate actix_web;
 #[macro_use]
 extern crate log;
+
 #[macro_use]
 extern crate serde_derive;
-// #[macro_use] extern crate lazy_static;
+
+#[macro_use]
+extern crate lazy_static;
 
 const BIND_TO: &'static str = "127.0.0.1:8888";
 const LOG_LEVEL: &'static str = "info";
