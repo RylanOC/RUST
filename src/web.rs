@@ -1,10 +1,16 @@
 use crate::templates::Curtain;
 use actix_web::http::Method;
-use actix_web::web::Data;
-use actix_web::{http, HttpRequest, HttpResponse};
+use actix_web::web::{Data, Bytes};
+use actix_web::{http, HttpRequest, HttpResponse, client::Client};
 use handlebars::Handlebars;
 
 use rand::seq::IteratorRandom;
+use actix_web::client::{ClientResponse, SendRequestError};
+use actix_web::dev::{PayloadStream, Payload};
+use actix_web::error::PayloadError;
+use actix_web::body::Body;
+use actix_web::test::read_body;
+use std::io::ErrorKind;
 
 /// Generates a random string of length `l`, of any capital letters, lowercase letters,
 /// and numbers.
@@ -58,8 +64,10 @@ pub async fn callback(req: HttpRequest, data: Data<Handlebars<'static>>) -> Http
                 .page_title("RUST")
                 .title("WOOHOO!")
                 .subtitle("You have successfully logged in!")
+                .subtitle("Getting auth tokens...")
                 .render(data.get_ref())
                 .unwrap();
+
             HttpResponse::Ok().body(page)
         }
         _ => HttpResponse::MethodNotAllowed().finish(),
@@ -89,3 +97,21 @@ pub async fn login(req: HttpRequest, _data: Data<Handlebars<'static>>) -> HttpRe
         _ => HttpResponse::MethodNotAllowed().finish(),
     }
 }
+
+// pub async fn make_item_request(client: &Client, to_get: &str, timeframe: &str) {
+//     let uri = format!(
+//         "https://api.spotify.com/v1/me/top/{}?limit=50&time_range={}",
+//         to_get, timeframe
+//     );
+//
+//     //  Create request builder and send request
+//     let response = client.get(uri)
+//         .header("asdf", "wow")
+//         .send()
+//         .await;
+//
+//     response.and_then(|response| {
+//         println!("Response: {:?}", response);
+//         Ok(())
+//     });
+// }

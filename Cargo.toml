@@ -4,7 +4,8 @@ version = "0.1.0"
 authors = [
     "Rylan <rylanoc@gmail.com>",
     "Antonia \"Nia\" Calia-Bogan <acaliabogan@acaliabogan.dev>",
-    "Gabe Maayan <gabemgem@gmail.com>"
+    "Gabe Maayan <gabemgem@gmail.com>",
+    "Leland Liu <jiashuliu@protonmail.com>"
 ]
 edition = "2018"
 
