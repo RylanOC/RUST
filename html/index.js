@@ -2,6 +2,29 @@
     author: Mary Montgomery
     date: 31 March 2020
 */
+
+/*  loginSelection
+    a function to press the button to log the user into
+    their spotify
+    @params
+        button_id: the id of the button that was pressed
+    @returns
+        api_call: what ever the spotify api call is passed to 
+                    somewhere else
+*/
+    function loginSelection(button_id) {
+        /*  get the button, and change the color to show selection */
+        let selected_button = document.getElementById(button_id);
+        selected_button.style.background = "black";
+        selected_button.style.color = "#cfe8fa";
+
+        /* on successful login, should changed to successfully logged in */
+        /*might need to implement alerts for if the user is trying to press
+            the music and time span buttons before logging in that just say like
+            'you need to login before we can show you your data'            */
+            
+    }
+
 /*  musicSelection
     a function to find out what music button was pressed
     (and send that information to another function that makes
