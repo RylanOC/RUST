@@ -65,7 +65,7 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpRespons
         Method::GET => {
             let query = req.uri().query();
             let artists: Option<String> = None;
-            let tracks: Option<String> = None;
+            let mut tracks: Option<String> = None;
             let re: &Regex = &QUERY_REGEX;
             let code = query
                 .and_then(|q| re.captures(q))
@@ -75,15 +75,16 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpRespons
                 let client = ClientBuilder::new()
                     .header("Authorization", code.unwrap())
                     .finish();
-                //let code = auth_code.unwrap();
-                client.get(PersonalizationData::Tracks.get_endpoint().to_string());
+                let res = client.get(PersonalizationData::Tracks.get_endpoint().to_string())
+                    .send()
+                    .await;
+                tracks = Some(res.unwrap().body().await.unwrap().iter().map(|b| *b as char).collect::<String>());
             }
-
 
             let page = Curtain::new()
                 .page_title("RUST")
                 .title("WOOHOO!")
-                .subtitle("")
+                .subtitle(tracks.map_or("unable to get".to_owned(), |s| s))
                 .render(hbs_reg)
                 .unwrap();
 
