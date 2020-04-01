@@ -102,7 +102,8 @@ p {
 	regular source_code font
 	size 18						*/
 .music-button, 
-.time-button {
+.time-button,
+.login-button {
   background-color: #cfe8fa;
   border: 5px #cfe8fa solid;
   color: black;
@@ -120,7 +121,8 @@ p {
 	regular source_code font
 	size 18						*/
 .music-button:hover,
-.time-button:hover {
+.time-button:hover,
+.login-button:hover {
   background-color: black;
   border: 5px #cfe8fa solid;
   color: #cde8fa;
@@ -133,7 +135,7 @@ p {
 }
 
 /*	when the button is pressed it should
-	remain how it looks when hovered over */
+	remain how it looks when hovered over 
 .music-button:focus,
 .time-button:focus {
   background-color: black;
@@ -144,8 +146,9 @@ p {
   font-size: 18pt;
   font-family: source_code;
   cursor: pointer;
-
 }
+*/
+
 
 
 /*how to center things*/
