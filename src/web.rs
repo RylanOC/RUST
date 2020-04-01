@@ -1,16 +1,10 @@
 use crate::templates::Curtain;
 use actix_web::http::Method;
-use actix_web::web::{Data, Bytes};
-use actix_web::{http, HttpRequest, HttpResponse, client::Client};
-use handlebars::Handlebars;
+use actix_web::web::{Data};
+use actix_web::{http, HttpRequest, HttpResponse};
 
 use rand::seq::IteratorRandom;
-use actix_web::client::{ClientResponse, SendRequestError, ClientBuilder};
-use actix_web::dev::{PayloadStream, Payload};
-use actix_web::error::PayloadError;
-use actix_web::body::Body;
-use actix_web::test::read_body;
-use std::io::ErrorKind;
+use actix_web::client::{ClientBuilder};
 use crate::{AppState, CLIENT_ID};
 use crate::spotify::PersonalizationData;
 
@@ -81,7 +75,7 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpRespons
                 let client = ClientBuilder::new()
                     .header("Authorization", code.unwrap())
                     .finish();
-                let code = auth_code.unwrap();
+                //let code = auth_code.unwrap();
                 client.get(PersonalizationData::Tracks.get_endpoint().to_string());
             }
 
