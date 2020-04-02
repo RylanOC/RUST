@@ -5,7 +5,6 @@ mod spotify;
 mod templates;
 mod web;
 
-// #[macro_use] extern crate actix_web;
 #[macro_use]
 extern crate log;
 
