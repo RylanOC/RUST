@@ -45,6 +45,7 @@ use rustls as tls;
 use std::io::BufReader;
 use rustls::internal::pemfile::{certs, rsa_private_keys};
 use std::fs::File;
+use std::process::exit;
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
@@ -70,10 +71,25 @@ async fn main() -> io::Result<()> {
 
     // load ssl keys
     let mut tls_config = tls::ServerConfig::new(tls::NoClientAuth::new());
-    let cert_file = &mut BufReader::new(File::open(cert).unwrap());
-    let key_file = &mut BufReader::new(File::open(priv_key).unwrap());
-    let cert_chain = certs(cert_file).unwrap();
-    let mut keys = rsa_private_keys(key_file).unwrap();
+
+    let mut cert_file = File::open(cert.clone())
+        .map_err(|e| {
+            error!("Could not open cert file at {}", cert);
+            exit(e.raw_os_error().unwrap_or(1))
+        })
+        .map(BufReader::new)
+        .unwrap();
+
+    let mut key_file = File::open(priv_key.clone())
+        .map_err(|e| {
+            error!("Could not read private key at {}", priv_key);
+            exit(e.raw_os_error().unwrap_or(1))
+        })
+        .map(BufReader::new)
+        .unwrap();
+
+    let cert_chain = certs(&mut cert_file).unwrap();
+    let mut keys = rsa_private_keys(&mut key_file).unwrap();
     tls_config.set_single_cert(cert_chain, keys.remove(0)).unwrap();
 
     let mut h = Handlebars::new();
