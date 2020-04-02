@@ -123,13 +123,13 @@ p {
 .music-button:hover,
 .time-button:hover,
 .login-button:hover {
-  background-color: black;
-  border: 5px #cfe8fa solid;
-  color: #cde8fa;
-  padding: 15px 25px;
-  text-align: center;
-  font-size: 18pt;
-  font-family: source_code;
+  background-color: black !important;
+  border: 5px #cfe8fa solid !important;
+  color: #cde8fa !important;
+  padding: 15px 25px !important;
+  text-align: center !important;
+  font-size: 18pt !important;
+  font-family: source_code !important;
   cursor: pointer;
 
 }
