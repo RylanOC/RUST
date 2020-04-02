@@ -22,7 +22,7 @@
         /*might need to implement alerts for if the user is trying to press
             the music and time span buttons before logging in that just say like
             'you need to login before we can show you your data'            */
-            
+
     }
 
 /*  musicSelection
@@ -43,26 +43,30 @@ function musicSelection(button_id) {
     selected_button.style.background = "black";
     selected_button.style.color = "#cfe8fa";
     
-    /* make the other buttons unable to be clicked */
+    /* black out previously clicked buttons */
     if (button_id == "artist-music-button" || 
         button_id == "song-music-button" ||
         button_id == "album-music-button" ) {
-        document.getElementById("genre-music-button").onclick = null;
+        document.getElementById("genre-music-button").style.background = "#cfe8fa";
+        document.getElementById("genre-music-button").style.color = "black";    
     }
     if (button_id == "artist-music-button" || 
         button_id == "song-music-button" ||
         button_id == "genre-music-button" ) {
-        document.getElementById("album-music-button").onclick = null;
+        document.getElementById("album-music-button").style.background = "#cfe8fa";
+        document.getElementById("album-music-button").style.color = "black";
     }
     if (button_id == "artist-music-button" || 
         button_id == "album-music-button" ||
         button_id == "genre-music-button" ) {
-        document.getElementById("song-music-button").onclick = null;
+        document.getElementById("song-music-button").style.background = "#cfe8fa";
+        document.getElementById("song-music-button").style.color = "black";
     }
     if (button_id == "song-music-button" || 
         button_id == "album-music-button" ||
         button_id == "genre-music-button" ) {
-        document.getElementById("artist-music-button").onclick = null;
+        document.getElementById("artist-music-button").style.background = "#cfe8fa";
+        document.getElementById("artist-music-button").style.color = "black";
     }
 
     /*  button_id looks like artist-music-button    */
@@ -94,18 +98,21 @@ function timeSelection(button_id) {
     selected_button.style.background = "black";
     selected_button.style.color = "#cfe8fa";
 
-    /* make sure the other buttons cannot be selected */
+    /* change the unselected buttons colors */
     if (button_id == "short-term-time-button" ||
         button_id == "medium-term-time-button") {
-        document.getElementById("long-term-time-button").onclick = null;
+        document.getElementById("long-term-time-button").style.background = "#cfe8fa";
+        document.getElementById("long-term-time-button").style.color = "black";
     }
     if (button_id == "short-term-time-button" ||
         button_id == "long-term-time-button") {
-        document.getElementById("medium-term-time-button").onclick = null;
+        document.getElementById("medium-term-time-button").style.background = "#cfe8fa";
+        document.getElementById("medium-term-time-button").style.color = "black";
     }
     if (button_id == "medium-term-time-button" ||
         button_id == "long-term-time-button") {
-        document.getElementById("short-term-time-button").onclick = null;
+        document.getElementById("short-term-time-button").style.background = "#cfe8fa";
+        document.getElementById("short-term-time-button").style.color = "black";
     }
 
     /*  button_id looks like short-term-time-button    */
