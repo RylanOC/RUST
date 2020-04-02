@@ -1,17 +1,18 @@
 use crate::templates::Curtain;
 use actix_web::http::Method;
-use actix_web::web::{Data};
+use actix_web::web::Data;
 use actix_web::{http, HttpRequest, HttpResponse};
 
-use rand::seq::IteratorRandom;
-use actix_web::client::{ClientBuilder};
-use crate::{AppState, CLIENT_ID};
 use crate::spotify::PersonalizationData;
+use crate::{AppState, CLIENT_ID};
+use actix_web::client::ClientBuilder;
+use rand::seq::IteratorRandom;
 
 use regex::Regex;
 
-lazy_static!{ static ref QUERY_REGEX: Regex = Regex::new("code=(.+)").unwrap(); }
-
+lazy_static! {
+    static ref QUERY_REGEX: Regex = Regex::new("code=(.+)").unwrap();
+}
 
 /// Generates a random string of length `l`, of any capital letters, lowercase letters,
 /// and numbers.
@@ -75,10 +76,19 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpRespons
                 let client = ClientBuilder::new()
                     .header("Authorization", code.unwrap())
                     .finish();
-                let res = client.get(PersonalizationData::Tracks.get_endpoint().to_string())
+                let res = client
+                    .get(PersonalizationData::Tracks.get_endpoint().to_string())
                     .send()
                     .await;
-                tracks = Some(res.unwrap().body().await.unwrap().iter().map(|b| *b as char).collect::<String>());
+                tracks = Some(
+                    res.unwrap()
+                        .body()
+                        .await
+                        .unwrap()
+                        .iter()
+                        .map(|b| *b as char)
+                        .collect::<String>(),
+                );
             }
 
             let page = Curtain::new()

@@ -9,7 +9,7 @@ pub struct AppState {
 impl AppState {
     pub fn new(registry: Arc<Handlebars<'static>>) -> Self {
         Self {
-            template_registry: registry
+            template_registry: registry,
         }
     }
 }

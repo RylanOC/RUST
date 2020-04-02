@@ -5,7 +5,7 @@ const SPOTIFY_ENDPOINT: &'static str = "https://api.spotify.com/v1/me/top/";
 #[derive(Copy, Clone, Debug, Hash, Eq, PartialEq)]
 pub enum PersonalizationData {
     Artists,
-    Tracks
+    Tracks,
 }
 
 impl PersonalizationData {
@@ -19,6 +19,8 @@ impl PersonalizationData {
 
     /// Get the endpoint of Spotify's API.
     pub fn get_endpoint(self) -> Uri {
-        format!("{}{}", SPOTIFY_ENDPOINT, self.get_endpoint_path()).parse().unwrap()
+        format!("{}{}", SPOTIFY_ENDPOINT, self.get_endpoint_path())
+            .parse()
+            .unwrap()
     }
 }
