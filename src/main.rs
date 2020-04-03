@@ -19,7 +19,7 @@ const DEFAULT_ADDRESS: &'static str = "127.0.0.1:8443";
 const ADDRESS_ENV_VAR: &'static str = "BIND_TO";
 
 /// Sets the log level as an env variable if it is not currently set.
-const DEFAULT_LOG_LEVEL: &'static str = "info";
+const DEFAULT_LOG_LEVEL: &'static str = "trace";
 const LOG_LEVEL_ENV_VAR: &'static str = "RUST_LOG"; // this cannot change.
 
 const CLIENT_ID: &'static str = "1de388fded5c43b68f60fcec9a81c956";
@@ -92,9 +92,17 @@ async fn main() -> io::Result<()> {
         .unwrap();
 
     let cert_chain = certs(&mut cert_file).unwrap();
+    trace!("Cert chain: {:?}", cert_chain);
     let mut keys = rsa_private_keys(&mut key_file).unwrap();
+    trace!("Private keys: {:?}", keys);
+
     tls_config
         .set_single_cert(cert_chain, keys.remove(0))
+        .map_err(|e| {
+            debug!("TLS error: {:?}", e);
+            error!("Could not configure TLS. ");
+            exit(1);
+        })
         .unwrap();
 
     let mut h = Handlebars::new();
