@@ -85,7 +85,7 @@ async fn main() -> io::Result<()> {
 
     let mut key_file = File::open(priv_key.clone())
         .map_err(|e| {
-            error!("Could not read private key at {}", priv_key);
+            error!("Could not read private key file at {}", priv_key);
             exit(e.raw_os_error().unwrap_or(1))
         })
         .map(BufReader::new)
