@@ -69,8 +69,8 @@ async fn main() -> io::Result<()> {
     );
     info!("Address set: {}", addr);
     info!("Client ID: {}", CLIENT_ID);
-    info!("Cert file location: {}", cert);
-    info!("Private key location: {}", priv_key);
+    info!("Cert file location: {}", cert_file);
+    info!("Private key location: {}", priv_key_file);
     info!("Log level set: {}", env::var(LOG_LEVEL_ENV_VAR).unwrap());
 
     // from example on https://actix.rs/docs/server/
