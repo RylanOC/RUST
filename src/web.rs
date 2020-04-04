@@ -4,11 +4,12 @@ use actix_web::web::Data;
 use actix_web::{http, HttpRequest, HttpResponse};
 
 use crate::spotify::PersonalizationData;
-use crate::{AppState, CLIENT_ID};
+use crate::app::AppState;
 use actix_web::client::ClientBuilder;
 use rand::seq::IteratorRandom;
 
 use regex::Regex;
+use crate::env;
 
 lazy_static! {
     static ref QUERY_REGEX: Regex = Regex::new("code=(.+)").unwrap();
@@ -110,11 +111,11 @@ pub async fn login(req: HttpRequest) -> HttpResponse {
         Method::GET => {
             let state: String = generate_random_string(16).await;
             let scope = "user-top-read";
-            let redirect_uri = "http%3A%2F%2Flocalhost%3A8888%2Fcallback";
+            let redirect_uri = format!("https://{}/callback", *env::ADDRESS);
 
             let query = format!(
                 "response_type=code&client_id={}&scope={}&redirect_uri={}&state={}",
-                CLIENT_ID, scope, redirect_uri, state
+                env::CLIENT_ID, scope, redirect_uri, state
             );
 
             let uri: String = format!("https://accounts.spotify.com/authorize?{}", query);
@@ -126,21 +127,3 @@ pub async fn login(req: HttpRequest) -> HttpResponse {
         _ => HttpResponse::MethodNotAllowed().finish(),
     }
 }
-
-// pub async fn make_item_request(client: &Client, to_get: &str, timeframe: &str) {
-//     let uri = format!(
-//         "https://api.spotify.com/v1/me/top/{}?limit=50&time_range={}",
-//         to_get, timeframe
-//     );
-//
-//     //  Create request builder and send request
-//     let response = client.get(uri)
-//         .header("asdf", "wow")
-//         .send()
-//         .await;
-//
-//     response.and_then(|response| {
-//         println!("Response: {:?}", response);
-//         Ok(())
-//     });
-// }
