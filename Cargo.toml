@@ -15,10 +15,11 @@ edition = "2018"
 handlebars = {version="3.0.1", features=["dir_source"]}
 # Actix stuff
 actix-rt = "1.0.0"
-actix-web = {version="2.0.0", features=["rustls"]}
+actix-web = {version="2.0.0", features=["openssl"]}
 actix-files = "~0.2"
 # SSL/TLS crate
-rustls = "^0.16.0"
+#rustls = "^0.16.0"
+openssl = "0.10.28"
 # Logger
 env_logger = "0.7.1"
 log = "0.4.8"

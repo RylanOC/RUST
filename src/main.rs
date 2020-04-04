@@ -43,11 +43,12 @@ use crate::app::AppState;
 use crate::web::*;
 use std::sync::Arc;
 
-use rustls as tls;
-use rustls::internal::pemfile::{certs, rsa_private_keys};
+//use rustls as tls;
+//use rustls::internal::pemfile::{certs, rsa_private_keys};
 use std::fs::File;
 use std::io::BufReader;
 use std::process::exit;
+use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
@@ -57,8 +58,8 @@ async fn main() -> io::Result<()> {
         env::set_var(LOG_LEVEL_ENV_VAR, DEFAULT_LOG_LEVEL);
     }
 
-    let cert = env::var(CERT_ENV_VAR).unwrap_or(CERT_FILE.to_owned());
-    let priv_key = env::var(PRIV_KEY_ENV_VAR).unwrap_or(PRIV_KEY.to_owned());
+    let cert_file = env::var(CERT_ENV_VAR).unwrap_or(CERT_FILE.to_owned());
+    let priv_key_file = env::var(PRIV_KEY_ENV_VAR).unwrap_or(PRIV_KEY.to_owned());
 
     env_logger::init();
     info!("Starting up.");
@@ -68,42 +69,14 @@ async fn main() -> io::Result<()> {
     );
     info!("Address set: {}", addr);
     info!("Client ID: {}", CLIENT_ID);
-    info!("Cert file location: {}", cert);
-    info!("Private key location: {}", priv_key);
+    info!("Cert file location: {}", cert_file);
+    info!("Private key location: {}", priv_key_file);
     info!("Log level set: {}", env::var(LOG_LEVEL_ENV_VAR).unwrap());
 
-    // load ssl keys
-    let mut tls_config = tls::ServerConfig::new(tls::NoClientAuth::new());
-
-    let mut cert_file = File::open(cert.clone())
-        .map_err(|e| {
-            error!("Could not open cert file at {}", cert);
-            exit(e.raw_os_error().unwrap_or(1))
-        })
-        .map(BufReader::new)
-        .unwrap();
-
-    let mut key_file = File::open(priv_key.clone())
-        .map_err(|e| {
-            error!("Could not read private key file at {}", priv_key);
-            exit(e.raw_os_error().unwrap_or(1))
-        })
-        .map(BufReader::new)
-        .unwrap();
-
-    let cert_chain = certs(&mut cert_file).unwrap();
-    trace!("Cert chain: {:?}", cert_chain);
-    let mut keys = rsa_private_keys(&mut key_file).unwrap();
-    trace!("Private keys: {:?}", keys);
-
-    tls_config
-        .set_single_cert(cert_chain, keys.remove(0))
-        .map_err(|e| {
-            debug!("TLS error: {:?}", e);
-            error!("Could not configure TLS. ");
-            exit(1);
-        })
-        .unwrap();
+    // from example on https://actix.rs/docs/server/
+    let mut builder = SslAcceptor::mozilla_intermediate(SslMethod::tls()).unwrap();
+    builder.set_private_key_file(priv_key_file.as_str(), SslFiletype::PEM).unwrap();
+    builder.set_certificate_chain_file(cert_file.as_str()).unwrap();
 
     let mut h = Handlebars::new();
     h.set_strict_mode(true);
@@ -123,7 +96,7 @@ async fn main() -> io::Result<()> {
             .service(a_web::resource("/callback").to(callback))
             .default_service(a_web::route().to(|| HttpResponse::NotFound()))
     })
-    .bind_rustls(addr, tls_config)?
+    .bind_openssl("127.0.0.1:8443", builder)?
     .run()
     .await
 }
