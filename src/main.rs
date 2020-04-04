@@ -67,8 +67,8 @@ async fn main() -> io::Result<()> {
         env::current_dir().unwrap().to_str().unwrap()
     );
     info!("Address set: {}", addr);
-    info!("Cert file location: {}", cert);
     info!("Client ID: {}", CLIENT_ID);
+    info!("Cert file location: {}", cert);
     info!("Private key location: {}", priv_key);
     info!("Log level set: {}", env::var(LOG_LEVEL_ENV_VAR).unwrap());
 
