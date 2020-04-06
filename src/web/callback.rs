@@ -1,34 +1,22 @@
 use actix_web::{HttpRequest, HttpResponse};
-use actix_web::http::{Method, header};
+use actix_web::http::{Method, header, Uri};
 use actix_web::web::Data;
 use crate::app::AppState;
-use regex::Regex;
-
+use std::str::FromStr;
 use actix_web::client::Client;
 use crate::auth::token_request::TokenRequest;
-
-lazy_static! {
-    static ref QUERY_REGEX: Regex = Regex::new("code=(.+)").unwrap();
-}
 
 /// Resource GET by spotify login response
 pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpResponse {
     //let hbs_reg = &app_data.template_registry;
     match *req.method() {
         Method::GET => {
-            let query = req.uri().query();
-            let re: &Regex = &QUERY_REGEX;
-            let code = query
-                .and_then(|q| re.captures(q))
-                .and_then(|caps| caps.get(0))
-                .map(|re_match| re_match.as_str())
+            let code = req
+                .uri()
+                .query()
+                .map(|q| q.split('&').collect::<Vec<&str>>())
+                .map(|v| &(v[0])[5..])
                 .unwrap();
-
-            // split code and string
-            let code = String::from(code);
-            let split_code: Vec<&str> = code.split('&').collect();
-            let code = &(split_code[0])[5..]; // get rid of the "code=" prefix
-            let state = &(split_code[1])[6..]; // get rid of the "code=" prefix
 
             let serialized_token_req = TokenRequest::get_serialized_request(code);
             let client = Client::default();
