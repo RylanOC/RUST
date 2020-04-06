@@ -5,6 +5,8 @@ use crate::app::AppState;
 use std::str::FromStr;
 use actix_web::client::Client;
 use crate::auth::token_request::TokenRequest;
+use crate::auth::token_response::TokenResponse;
+use std::process::exit;
 
 /// Resource GET by spotify login response
 pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpResponse {
@@ -20,14 +22,26 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpRespons
 
             let serialized_token_req = TokenRequest::get_serialized_request(code);
             let client = Client::default();
-            let response = client
+            let mut response = client
                 .post("https://accounts.spotify.com/api/token")
                 .header(header::CONTENT_TYPE, "application/x-www-form-urlencoded")
                 .header(header::CONTENT_LENGTH, serialized_token_req.len())
                 .send_body(serialized_token_req)
-                .await;
+                .await
+                .map_err(|e| {
+                    error!(target: "RUST::callback", "Error getting tokens: {:?}", e);
+                    exit(1);
+                })
+                .unwrap();
 
-            HttpResponse::Ok().body(format!("{:?}", response))
+            let body = response.json::<TokenResponse>().await.unwrap();
+            if body.is_error() {
+                error!(target: "RUST::callback", "Response body was error: {:?}", body.error.unwrap());
+                exit(1);
+            }
+            let tokens = body.unwrap();
+
+            HttpResponse::Ok().body(format!("{:?} \n\n\n tokens: {:?}", response.headers(), tokens))
         }
         _ => HttpResponse::MethodNotAllowed().finish(),
     }
