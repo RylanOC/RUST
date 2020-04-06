@@ -5,6 +5,7 @@ mod env;
 mod spotify;
 mod templates;
 mod web;
+mod auth;
 
 #[macro_use]
 extern crate log;
@@ -53,10 +54,10 @@ async fn main() -> io::Result<()> {
             // logger should always be last middleware added.
             .data(data.clone())
             .service(afs::Files::new("static/", "static/"))
-            .service(a_web::resource("/is_up").to(is_up))
-            .service(a_web::resource("/").to(index))
-            .service(a_web::resource("/login").to(login))
-            .service(a_web::resource("/callback").to(callback))
+            .service(a_web::resource("/is_up").to(  is_up::is_up))
+            .service(a_web::resource("/").to(index::index))
+            .service(a_web::resource("/login").to(login::login))
+            .service(a_web::resource("/callback").to(callback::callback))
             .default_service(a_web::route().to(|| HttpResponse::NotFound()))
     })
     .bind_openssl(&*env::ADDRESS, builder)?

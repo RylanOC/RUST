@@ -13,3 +13,6 @@ Cargo.lock
 
 # SSL/TLS stuff
 *.pem
+
+# Ignored because I store my client secret here -- nia
+env.bash
