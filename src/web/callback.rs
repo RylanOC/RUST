@@ -27,13 +27,6 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpRespons
                 .send_body(serialized_token_req)
                 .await;
 
-            // let page = Curtain::new()
-            //     .page_title("RUST")
-            //     .title("WOOHOO!")
-            //     .subtitle(tracks.map_or("unable to get".to_owned(), |s| s))
-            //     .render(hbs_reg)
-            //     .unwrap();
-
             HttpResponse::Ok().body(format!("{:?}", response))
         }
         _ => HttpResponse::MethodNotAllowed().finish(),
