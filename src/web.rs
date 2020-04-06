@@ -112,10 +112,11 @@ pub async fn login(req: HttpRequest) -> HttpResponse {
             let state: String = generate_random_string(16).await;
             let scope = "user-top-read";
             let redirect_uri = format!("https://{}/callback", *env::ADDRESS);
+            //let redirect_uri = format!("https://{}/callback", "localhost:8888");
 
             let query = format!(
-                "response_type=code&client_id={}&scope={}&redirect_uri={}&state={}",
-                *env::CLIENT_ID, scope, redirect_uri, state
+                "response_type=code&redirect_uri={}&client_id={}&scope={}&state={}",
+                *env::CLIENT_ID, redirect_uri, scope, state
             );
 
             let uri: String = format!("https://accounts.spotify.com/authorize?{}", query);
