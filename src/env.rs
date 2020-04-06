@@ -7,7 +7,7 @@ lazy_static! {
 }
 
 /// Default address to use if it is not already set by an environment variable.
-const DEFAULT_ADDRESS: &'static str = "127.0.0.1:8443";
+const DEFAULT_ADDRESS: &'static str = "localhost:8443";
 const ADDRESS_ENV_VAR: &'static str = "BIND_TO";
 
 /// Sets the log level as an env variable if it is not currently set.

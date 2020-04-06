@@ -24,6 +24,12 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpRespons
                 .map(|re_match| re_match.as_str())
                 .unwrap();
 
+            // split code and string
+            let code = String::from(code);
+            let split_code: Vec<&str> = code.split('&').collect();
+            let code = &(split_code[0])[5..]; // get rid of the "code=" prefix
+            let state = &(split_code[1])[6..]; // get rid of the "code=" prefix
+
             let serialized_token_req = TokenRequest::get_serialized_request(code);
             let client = Client::default();
             let response = client

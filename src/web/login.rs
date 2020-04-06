@@ -25,10 +25,10 @@ pub async fn login(req: HttpRequest) -> HttpResponse {
             let scope = "user-top-read";
 
             let path_and_query_str = format!(
-                "/authorize?response_type=code&client_id={}&scope={}&redirect_uri={}&state={}",
+                "/authorize?client_id={}&response_type=code&redirect_uri={}&scope={}&state={}",
                 *env::CLIENT_ID,
-                scope,
                 auth::get_callback(),
+                scope,
                 state
             );
 
@@ -41,6 +41,7 @@ pub async fn login(req: HttpRequest) -> HttpResponse {
                 .build()
                 .unwrap();
 
+            println!("callback uri: {}", path_and_query_str);
             //trace!("Callback uri: {}", uri);
 
             HttpResponse::PermanentRedirect()
