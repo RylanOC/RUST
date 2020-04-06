@@ -1,4 +1,3 @@
-
 lazy_static! {
     pub static ref ADDRESS: String = address();
     pub static ref CERT_FILE: String = cert_file();
@@ -42,13 +41,15 @@ pub fn setup() {
     info!("Client ID: {}", *CLIENT_ID);
     info!("Cert file location: {}", *CERT_FILE);
     info!("Private key location: {}", *KEY_FILE);
-    info!("Log level set: {}", std::env::var(LOG_LEVEL_ENV_VAR).unwrap());
+    info!(
+        "Log level set: {}",
+        std::env::var(LOG_LEVEL_ENV_VAR).unwrap()
+    );
 }
 
 /// Function to get the hosting address.
 fn address() -> String {
-    std::env::var(ADDRESS_ENV_VAR)
-        .unwrap_or(DEFAULT_ADDRESS.to_owned())
+    std::env::var(ADDRESS_ENV_VAR).unwrap_or(DEFAULT_ADDRESS.to_owned())
 }
 
 /// Function to get the cert file location.
