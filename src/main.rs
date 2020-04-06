@@ -6,6 +6,7 @@ mod spotify;
 mod templates;
 mod web;
 mod auth;
+mod model;
 
 #[macro_use]
 extern crate log;

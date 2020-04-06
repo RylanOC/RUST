@@ -23,10 +23,11 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpRespons
 
             let response = TokenRequest::make_request(code).await;
             if response.is_error() {
-                error!(target: "RUST::callback", "Response body was error: {:?}", body.error.unwrap());
+                error!(target: "RUST::callback", "Response body was error: {:?}",
+                       response.error.unwrap());
                 exit(1);
             }
-            let tokens = body.unwrap();
+            let tokens = response.unwrap();
             let artists = PersonalizationData::Artists
                 .make_req(&tokens)
                 .send()
@@ -37,8 +38,7 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpRespons
                 })
                 .unwrap();
 
-
-            HttpResponse::Ok().body(format!("{:?} \n\n\n tokens: {:?}", response.headers(), tokens))
+            HttpResponse::Ok().body(format!("tokens: {:?}", tokens))
         }
         _ => HttpResponse::MethodNotAllowed().finish(),
     }
