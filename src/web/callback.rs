@@ -41,6 +41,7 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpRespons
             }
             let tokens = body.unwrap();
 
+
             HttpResponse::Ok().body(format!("{:?} \n\n\n tokens: {:?}", response.headers(), tokens))
         }
         _ => HttpResponse::MethodNotAllowed().finish(),

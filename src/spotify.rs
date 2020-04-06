@@ -1,4 +1,7 @@
 use actix_web::http::Uri;
+use crate::auth::token_response::Tokens;
+use actix_web::client::{ClientResponse, Client};
+use actix_web::http::header;
 
 const SPOTIFY_ENDPOINT: &'static str = "https://api.spotify.com/v1/me/top/";
 
@@ -22,5 +25,12 @@ impl PersonalizationData {
         format!("{}{}", SPOTIFY_ENDPOINT, self.get_endpoint_path())
             .parse()
             .unwrap()
+    }
+
+    /// Make a request to Spotify to get data.
+    pub async fn make_req(self, tokens: Tokens) -> ClientResponse {
+        let client = Client::default();
+        client.get(self.get_endpoint())
+            .header(header::AUTHORIZATION, )
     }
 }
