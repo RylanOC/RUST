@@ -1,6 +1,4 @@
 use actix_web::{HttpRequest, HttpResponse};
-use actix_web::web::Data;
-use crate::app::AppState;
 use actix_web::http::{header, Method, PathAndQuery, Uri};
 use rand::seq::IteratorRandom;
 use std::str::FromStr;

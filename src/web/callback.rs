@@ -1,8 +1,7 @@
 use actix_web::{HttpRequest, HttpResponse};
-use actix_web::http::{Method, PathAndQuery, Uri, header};
+use actix_web::http::{Method, header};
 use actix_web::web::Data;
 use crate::app::AppState;
-use crate::templates::Curtain;
 use regex::Regex;
 
 use actix_web::client::Client;
@@ -14,7 +13,7 @@ lazy_static! {
 
 /// Resource GET by spotify login response
 pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpResponse {
-    let hbs_reg = &app_data.template_registry;
+    //let hbs_reg = &app_data.template_registry;
     match *req.method() {
         Method::GET => {
             let query = req.uri().query();
