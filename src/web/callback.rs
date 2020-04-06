@@ -36,9 +36,15 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpRespons
                     error!(target: "RUST::callback", "Error getting artist data: {:?}", e);
                     exit(1);
                 })
-                .unwrap();
+                .unwrap()
+                .body()
+                .await
+                .unwrap()
+                .iter()
+                .map(|byte| *byte as char)
+                .collect::<String>();
 
-            HttpResponse::Ok().body(format!("tokens: {:?}", tokens))
+            HttpResponse::Ok().body(format!("tokens: {:?} \n\nartists:{}", tokens, artists))
         }
         _ => HttpResponse::MethodNotAllowed().finish(),
     }
