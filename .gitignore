@@ -15,5 +15,4 @@ Cargo.lock
 *.pem
 
 # Ignored because I store my client secret here -- nia
-./env.bash
 env.bash
