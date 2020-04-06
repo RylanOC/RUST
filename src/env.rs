@@ -3,7 +3,7 @@ lazy_static! {
     pub static ref ADDRESS: String = address();
     pub static ref CERT_FILE: String = cert_file();
     pub static ref KEY_FILE: String = priv_key_file();
-    pub static ref CLIENT_ID: String = cliet_id();
+    pub static ref CLIENT_ID: String = client_id();
 }
 
 /// Default address to use if it is not already set by an environment variable.
@@ -39,7 +39,7 @@ pub fn setup() {
         std::env::current_dir().unwrap().to_str().unwrap()
     );
     info!("Address set: {}", *ADDRESS);
-    info!("Client ID: {}", CLIENT_ID);
+    info!("Client ID: {}", *CLIENT_ID);
     info!("Cert file location: {}", *CERT_FILE);
     info!("Private key location: {}", *KEY_FILE);
     info!("Log level set: {}", std::env::var(LOG_LEVEL_ENV_VAR).unwrap());
