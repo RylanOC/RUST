@@ -38,6 +38,6 @@ impl PersonalizationData {
     pub fn make_req(self, tokens: &Tokens) -> ClientRequest {
         let client = Client::default();
         client.get(self.get_endpoint())
-            .header(header::AUTHORIZATION, format!("Bearer: {}", tokens.access_token))
+            .bearer_auth(&tokens.access_token)
     }
 }

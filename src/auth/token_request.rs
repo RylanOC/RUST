@@ -4,6 +4,10 @@
 
 use crate::env;
 use crate::auth::get_callback;
+use actix_web::client::{Client};
+use actix_web::http::header;
+use std::process::exit;
+use crate::auth::token_response::TokenResponse;
 
 /// Represents a request to Spotify to get an auth token.
 #[derive(Serialize, Debug, Clone)]
@@ -25,5 +29,25 @@ impl<'a> TokenRequest<'a> {
         token_request.push_str(&format!("&code={}&redirect_uri={}", code, get_callback()));
 
         token_request
+    }
+
+    /// Token request.
+    pub async fn make_request(code: &str) -> TokenResponse {
+        let serialized_token_req = TokenRequest::get_serialized_request(code);
+        let client = Client::default();
+        client
+            .post("https://accounts.spotify.com/api/token")
+            .header(header::CONTENT_TYPE, "application/x-www-form-urlencoded")
+            .header(header::CONTENT_LENGTH, serialized_token_req.len())
+            .send_body(serialized_token_req)
+            .await
+            .map_err(|e| {
+                error!(target: "RUST: TokenRequest::make_request", "Error getting tokens: {:?}", e);
+                exit(1);
+            })
+            .unwrap()
+            .json::<TokenResponse>()
+            .await
+            .unwrap()
     }
 }

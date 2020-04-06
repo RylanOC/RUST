@@ -21,22 +21,8 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpRespons
                 .map(|v| &(v[0])[5..])
                 .unwrap();
 
-            let serialized_token_req = TokenRequest::get_serialized_request(code);
-            let client = Client::default();
-            let mut response = client
-                .post("https://accounts.spotify.com/api/token")
-                .header(header::CONTENT_TYPE, "application/x-www-form-urlencoded")
-                .header(header::CONTENT_LENGTH, serialized_token_req.len())
-                .send_body(serialized_token_req)
-                .await
-                .map_err(|e| {
-                    error!(target: "RUST::callback", "Error getting tokens: {:?}", e);
-                    exit(1);
-                })
-                .unwrap();
-
-            let body = response.json::<TokenResponse>().await.unwrap();
-            if body.is_error() {
+            let response = TokenRequest::make_request(code).await;
+            if response.is_error() {
                 error!(target: "RUST::callback", "Response body was error: {:?}", body.error.unwrap());
                 exit(1);
             }
