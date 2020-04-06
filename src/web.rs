@@ -75,7 +75,7 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpRespons
                 .map(|re_match| re_match.as_str());
             if code.is_some() {
                 let client = ClientBuilder::new()
-                    .header("Authorization", code.unwrap())
+                    .header(http::header::AUTHORIZATION, code.unwrap())
                     .finish();
                 let res = client
                     .get(PersonalizationData::Tracks.get_endpoint().to_string())
@@ -115,7 +115,7 @@ pub async fn login(req: HttpRequest) -> HttpResponse {
 
             let query = format!(
                 "response_type=code&client_id={}&scope={}&redirect_uri={}&state={}",
-                env::CLIENT_ID, scope, redirect_uri, state
+                *env::CLIENT_ID, scope, redirect_uri, state
             );
 
             let uri: String = format!("https://accounts.spotify.com/authorize?{}", query);

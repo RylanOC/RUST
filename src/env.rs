@@ -3,10 +3,11 @@ lazy_static! {
     pub static ref ADDRESS: String = address();
     pub static ref CERT_FILE: String = cert_file();
     pub static ref KEY_FILE: String = priv_key_file();
+    pub static ref CLIENT_ID: String = cliet_id();
 }
 
 /// Default address to use if it is not already set by an environment variable.
-const DEFAULT_ADDRESS: &'static str = "localhost:8443";
+const DEFAULT_ADDRESS: &'static str = "127.0.0.1:8443";
 const ADDRESS_ENV_VAR: &'static str = "BIND_TO";
 
 /// Sets the log level as an env variable if it is not currently set.
@@ -14,7 +15,8 @@ const DEFAULT_LOG_LEVEL: &'static str = "info";
 const LOG_LEVEL_ENV_VAR: &'static str = "RUST_LOG"; // this cannot change.
 
 /// Client ID given by Spotify
-pub const CLIENT_ID: &'static str = "1de388fded5c43b68f60fcec9a81c956";
+const DEFAULT_CLIENT_ID: &'static str = "1de388fded5c43b68f60fcec9a81c956";
+const CLIENT_ID_ENV_VAR: &'static str = "CLIENT_ID"; // will break env.bash if changed.
 
 /// Default cert file location. Can be overridden with "CERT_FILE" env variable.
 const DEFAULT_CERT_FILE: &'static str = "cert.pem";
@@ -57,4 +59,9 @@ fn cert_file() -> String {
 /// Function to get the private key location.
 fn priv_key_file() -> String {
     std::env::var(KEY_FILE_ENV_VAR).unwrap_or(DEFAULT_KEY_FILE.to_owned())
+}
+
+/// Function to get client ID.
+fn client_id() -> String {
+    std::env::var(CLIENT_ID_ENV_VAR).unwrap_or(DEFAULT_CLIENT_ID.to_owned())
 }
