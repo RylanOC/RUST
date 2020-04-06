@@ -124,7 +124,7 @@ pub async fn login(req: HttpRequest) -> HttpResponse {
                 state
             );
 
-            debug!("Callback path_and_query: {}", path_and_query_str);
+            info!("Callback path_and_query: {}", path_and_query_str);
 
             let path_and_query = PathAndQuery::from_str(path_and_query_str.as_str()).unwrap();
 
@@ -135,7 +135,7 @@ pub async fn login(req: HttpRequest) -> HttpResponse {
                 .build()
                 .unwrap();
 
-            debug!("Callback uri: {}", uri);
+            info!("Callback uri: {}", uri);
 
             HttpResponse::PermanentRedirect()
                 .header(http::header::LOCATION, uri.to_string())
