@@ -11,10 +11,28 @@ use rand::seq::IteratorRandom;
 use crate::env;
 use percent_encoding::{percent_encode, NON_ALPHANUMERIC};
 use regex::Regex;
+use actix_web::body::Body;
 use std::str::FromStr;
+use std::collections::HashMap;
+
+extern crate base64;
 
 lazy_static! {
     static ref QUERY_REGEX: Regex = Regex::new("code=(.+)").unwrap();
+}
+
+#[derive(Serialize, Debug)]
+struct Post_Body {
+    body: String
+}
+
+#[derive(Serialize, Debug)]
+struct TokenRequest<'a> {
+    grant_type: String,
+    client_id: &'a String,
+    client_secret: &'a String,
+    code: &'a str,
+    redirect_uri: String
 }
 
 /// Generates a random string of length `l`, of any capital letters, lowercase letters,
@@ -76,9 +94,62 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpRespons
                 .and_then(|caps| caps.get(0))
                 .map(|re_match| re_match.as_str());
             if code.is_some() {
-                let client = ClientBuilder::new()
-                    .header(http::header::AUTHORIZATION, code.unwrap())
-                    .finish();
+                let client = ClientBuilder::new().finish();
+
+                // split code and string
+                let initial_code = code.unwrap();
+                println!("Initial code: {}", initial_code);
+                let code = String::from(initial_code);
+                let split_code: Vec<&str> = code.split('&').collect();
+                let code = &(split_code[0])[5..]; // get rid of the "code=" prefix
+                let state = &(split_code[1])[6..]; // get rid of the "code=" prefix
+
+                let client_id = &*env::CLIENT_ID;
+                let client_secret = &*env::CLIENT_SECRET;
+                //let redirect_uri = format!("https://{}/callback", *env::ADDRESS);
+                let redirect_uri = format!("https://{}/callback", *env::ADDRESS);
+                //let redirect_uri = format!("https%3A%2F%2F{}%2Fcallback", percent_encode(&*env::ADDRESS.as_bytes(), NON_ALPHANUMERIC).to_string()); // encodes periods, which i believe is wrong
+
+                // Tried with a struct
+                // let mut token_request = TokenRequest {
+                //     grant_type: "authorization_code".to_string(),
+                //     client_id: &client_id,
+                //     client_secret: &client_secret,
+                //     code: &request_code,
+                //     redirect_uri: request_redirect_uri
+                // };
+
+                let token_url = Post_Body {
+                    body: format!("grant_type={}&code={}&redirect_uri={}",
+                                  "authorization_code", code, redirect_uri)
+                };
+
+                // Tried with a map
+                //let mut body_data = HashMap::new();
+                //body_data.insert("grant_type", "authorization_code");
+                //body_data.insert("&client_id", client_id);
+                //body_data.insert("&client_secret", client_secret);
+                //body_data.insert("code", code);
+                //body_data.insert("redirect_uri", redirect_uri.as_str());
+
+                let header = format!("Authorization: Basic {}", base64::encode(format!("{}:{}", client_id, client_secret)));
+                let post_res = client.post("https://accounts.spotify.com/api/token")
+                    .header(http::header::CONTENT_TYPE, "application/x-www-form-urlencoded")
+                    .header("Authorization", header.clone())
+                    .header(http::header::CONTENT_LENGTH, token_url.body.len())
+                    //.header(http::header::CACHE_CONTROL, "no-cache")
+                    .send_form(&token_url)
+                    .await;
+
+                println!("code: {:?}", code);
+                println!("state (not needed): {:?}", state);
+                println!("token_url: {:?}", &token_url);
+                println!("redirect uri: {:?}", &redirect_uri);
+                //println!("body_data: {:?}", &body_data);
+                println!("header: {:?}", &header);
+                println!("post_res: {:?}", post_res);
+
+                /*
                 let res = client
                     .get(PersonalizationData::Tracks.get_endpoint().to_string())
                     .send()
@@ -92,6 +163,7 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpRespons
                         .map(|b| *b as char)
                         .collect::<String>(),
                 );
+                */
             }
 
             let page = Curtain::new()
@@ -114,17 +186,17 @@ pub async fn login(req: HttpRequest) -> HttpResponse {
             let state: String = generate_random_string(16).await;
             let scope = "user-top-read";
 
-            let redirect_uri = format!("https://{}/callback", *env::ADDRESS);
+            //let redirect_uri = format!("https://{}/callback", *env::ADDRESS);
+            let mut redirect_uri = format!("https%3A%2F%2F{}%2Fcallback", *env::ADDRESS);
+            //let redirect_uri = format!("https%3A%2F%2F{}%2Fcallback", percent_encode(&*env::ADDRESS.as_bytes(), NON_ALPHANUMERIC).to_string()); // encodes periods, which i believe is wrong
 
             let path_and_query_str = format!(
                 "/authorize?response_type=code&client_id={}&scope={}&redirect_uri={}&state={}",
-                *env::CLIENT_ID,
-                scope,
-                percent_encode(redirect_uri.as_bytes(), NON_ALPHANUMERIC).to_string(),
-                state
+                *env::CLIENT_ID, scope, redirect_uri, state
             );
 
             //trace!("Callback path_and_query: {}", path_and_query_str);
+            println!("Callback path_and_query: {}", path_and_query_str);
 
             let path_and_query = PathAndQuery::from_str(path_and_query_str.as_str()).unwrap();
 
