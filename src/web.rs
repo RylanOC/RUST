@@ -1,5 +1,5 @@
 use crate::templates::Curtain;
-use actix_web::http::Method;
+use actix_web::http::{Method, Uri, PathAndQuery};
 use actix_web::web::Data;
 use actix_web::{http, HttpRequest, HttpResponse};
 
@@ -10,6 +10,8 @@ use rand::seq::IteratorRandom;
 
 use regex::Regex;
 use crate::env;
+use std::str::FromStr;
+use percent_encoding::{percent_encode, NON_ALPHANUMERIC};
 
 lazy_static! {
     static ref QUERY_REGEX: Regex = Regex::new("code=(.+)").unwrap();
@@ -111,17 +113,33 @@ pub async fn login(req: HttpRequest) -> HttpResponse {
         Method::GET => {
             let state: String = generate_random_string(16).await;
             let scope = "user-top-read";
-            let redirect_uri = format!("https://{}/callback", *env::ADDRESS);
 
-            let query = format!(
-                "response_type=code&redirect_uri={}&client_id={}&scope={}&state={}",
-                redirect_uri,*env::CLIENT_ID, scope, state
-            );
+            let redirect_uri = format!("https://{}/callback",
+                                       *env::ADDRESS);
 
-            let uri: String = format!("https://accounts.spotify.com/authorize?{}", query);
+            let path_and_query_str =
+                format!("/authorize?response_type=code&client_id={}&scope={}&redirect_uri={}&state={}",
+                        *env::CLIENT_ID,
+                        scope,
+                        percent_encode(redirect_uri.as_bytes(), NON_ALPHANUMERIC).to_string(),
+                        state
+                );
+
+            debug!("Callback path_and_query: {}", path_and_query_str);
+
+            let path_and_query =
+                PathAndQuery::from_str( path_and_query_str.as_str()).unwrap();
+
+            let uri = Uri::builder()
+                .scheme("https")
+                .authority("accounts.spotify.com")
+                .path_and_query(path_and_query)
+                .build().unwrap();
+
+            debug!("Callback uri: {}", uri);
 
             HttpResponse::PermanentRedirect()
-                .header(http::header::LOCATION, uri)
+                .header(http::header::LOCATION, uri.to_string())
                 .finish()
         }
         _ => HttpResponse::MethodNotAllowed().finish(),

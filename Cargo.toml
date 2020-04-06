@@ -17,6 +17,8 @@ handlebars = {version="3.0.1", features=["dir_source"]}
 actix-rt = "1.0.0"
 actix-web = {version="2.0.0", features=["openssl"]}
 actix-files = "~0.2"
+# URL percent encoding
+percent-encoding = "2.1.0"
 # SSL/TLS crate
 openssl = "0.10.28"
 # Logger
