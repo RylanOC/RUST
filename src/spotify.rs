@@ -40,4 +40,6 @@ impl PersonalizationData {
         client.get(self.get_endpoint())
             .bearer_auth(&tokens.access_token)
     }
+
+    //pub fn parse_json(self, json: String) ->
 }

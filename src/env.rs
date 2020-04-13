@@ -75,5 +75,5 @@ fn client_id() -> String {
 
 /// Function to get client secret.
 fn client_secret() -> String {
-    std::env::var(CLIENT_SECRET_ENV_VAR).unwrap_or(DEFAULT_CLIENT_SECRET.to_owned())
+    std::env::var(CLIENT_SECRET_ENV_VAR).expect("ERROR: CLIENT ID NOT SET")
 }

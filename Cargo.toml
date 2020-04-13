@@ -29,6 +29,7 @@ serde = "~1"
 serde_derive = "~1"
 serde_urlencoded = "0.6.1"
 url = { version = "2.0", features = ["serde"] }
+serde_json = "1.0"
 # Random number generator
 rand = "0.7.3"
 # Regular expressions

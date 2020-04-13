@@ -8,6 +8,14 @@ use crate::auth::token_request::TokenRequest;
 use crate::auth::token_response::TokenResponse;
 use std::process::exit;
 use crate::spotify::PersonalizationData;
+use serde_json::{Result, Value, from_str};
+use crate::model;
+use crate::model::{Artist, Items};
+
+async fn extract_artists(artists: String) -> Result<Vec<Artist>> {
+    let items: model::Items = from_str(artists.as_str())?;
+    Ok(items.items)
+}
 
 /// Resource GET by spotify login response
 pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpResponse {
@@ -43,8 +51,30 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpRespons
                 .iter()
                 .map(|byte| *byte as char)
                 .collect::<String>();
+            //artists.replace(r#"types"#, "type_str");
 
-            HttpResponse::Ok().body(format!("tokens: {:?} \n\nartists:{}", tokens, artists))
+            let items = extract_artists(artists.clone()).await.unwrap();
+            //let artists = items.artists;
+
+            //let artists_vec = value.as_object().unwrap().get("items").unwrap();
+            // let artists_map = value.as_object().unwrap();
+            // let artists_vec = &artists_map.get("items").unwrap().as_array().unwrap();
+            //
+            // println!("artists len: {}", artists_vec.len());
+            // for obj in artists_vec.iter() {
+            //     println!("for {}", obj.get("name").unwrap());
+            //     println!("external urls: {}", obj.get("external_urls").unwrap().get("spotify").unwrap());
+            //     println!("followers: {}", obj.get("followers").unwrap().get("total").unwrap());
+            //     println!("genres: {:?}", obj.get("genres").unwrap().as_array().unwrap().iter().map(|value| value.as_str().unwrap()).collect::<String>());
+            // }
+
+            //let items = &value["items"];
+            //println!("artists_map: {:#?}", artists_vec);
+            for artist in items {
+                println!("artist: {:?}", artist);
+            }
+
+            HttpResponse::Ok().body(format!("tokens: {:?} \n\nartists:{:?}", tokens, artists))
         }
         _ => HttpResponse::MethodNotAllowed().finish(),
     }
