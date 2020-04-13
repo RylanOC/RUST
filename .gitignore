@@ -10,3 +10,10 @@ Cargo.lock
 **/*.rs.bk
 
 /.idea
+
+# SSL/TLS stuff
+*.pem
+
+# Ignored because I store my client secret here -- nia
+env.bash
+RUST_ENV.bash

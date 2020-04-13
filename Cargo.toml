@@ -17,8 +17,9 @@ handlebars = {version="3.0.1", features=["dir_source"]}
 actix-rt = "1.0.0"
 actix-web = {version="2.0.0", features=["openssl"]}
 actix-files = "~0.2"
+# URL percent encoding
+percent-encoding = "2.1.0"
 # SSL/TLS crate
-#rustls = "^0.16.0"
 openssl = "0.10.28"
 # Logger
 env_logger = "0.7.1"
@@ -26,6 +27,9 @@ log = "0.4.8"
 # Serialization/Deserialization
 serde = "~1"
 serde_derive = "~1"
+serde_urlencoded = "0.6.1"
+url = { version = "2.0", features = ["serde"] }
+serde_json = "1.0"
 # Random number generator
 rand = "0.7.3"
 # Regular expressions
