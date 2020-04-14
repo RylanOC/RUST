@@ -1,7 +1,7 @@
-use crate plotlib::src::page::Page;
-use crate plotlib::src::repr::BarChart;
-use crate plotlib::src::style::BoxStyle;
-use crate plotlib::src::view::CategoricalView;
+use plotlib::page::Page;
+use plotlib::repr::BarChart;
+use plotlib::style::BoxStyle;
+use plotlib::view::CategoricalView;
 
 use std::collections::VecDeque;
 
