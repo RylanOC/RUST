@@ -11,8 +11,8 @@ pub struct Curtain {
     pub subtitle: String,
     /// Is there a login button?
     pub login_button: String,
-    // List of recently listened to songs
-    pub song_list: String,
+    // List of recently listened to artists
+    pub artist_list: String,
 }
 
 impl Curtain {
@@ -45,8 +45,9 @@ impl Curtain {
         self
     }
 
-    pub fn song_list(mut self, song_list: impl Into<String>) {
-        self.artist_list = song_list.into();
+    /// Builder pattern function to set the artist list in this curtain.
+    pub fn artist_list(mut self, list: impl Into<String>) -> Self {
+        self.artist_list = list.into();
         self
     }
 
