@@ -26,3 +26,6 @@ serde = "~1"
 serde_derive = "~1"
 # Random number generator
 rand = "0.7.3"
+# Data visualization
+svg = "0.7.1"
+failure = "0.1.7"
