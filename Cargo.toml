@@ -45,3 +45,4 @@ rspotify = "0.9.0"
 # Data visualization
 svg = "0.7.1"
 failure = "0.1.7"
+plotlib = { path = "plotlib", version = "0.5.1" }
