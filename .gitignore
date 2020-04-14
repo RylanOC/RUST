@@ -17,3 +17,4 @@ Cargo.lock
 # Ignored because I store my client secret here -- nia
 env.bash
 RUST_ENV.bash
+*.bash
