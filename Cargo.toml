@@ -44,4 +44,6 @@ lazy_static = "1.4.0"
 # These models should accurately represent spotify's data model, and they
 # all have serialization and deserialization already.
 rspotify = "0.9.0"
+# Data visualization
+svg = "0.7.1"
 failure = "0.1.7"
