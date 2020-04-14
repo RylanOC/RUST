@@ -8,6 +8,8 @@ mod model;
 mod spotify;
 mod templates;
 mod web;
+mod barchart_maker;
+mod plotlib;
 
 #[macro_use]
 extern crate log;
