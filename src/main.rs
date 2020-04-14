@@ -2,6 +2,8 @@
 
 mod templates;
 mod web;
+mod barchart_maker;
+mod plotlib;
 
 // #[macro_use] extern crate actix_web;
 #[macro_use]
@@ -44,6 +46,7 @@ async fn main() -> io::Result<()> {
             .service(a_web::resource("/").to(index))
             .service(a_web::resource("/login").to(login))
             .service(a_web::resource("/callback").to(callback))
+            .service(a_web::resource("/testchart").to(testchart))
             .default_service(a_web::route().to(|| HttpResponse::NotFound()))
     })
     .bind(BIND_TO)?

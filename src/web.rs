@@ -1,4 +1,5 @@
 use crate::templates::Curtain;
+use crate::barchart_maker;
 use actix_web::http::Method;
 use actix_web::web::Data;
 use actix_web::{http, HttpRequest, HttpResponse};
@@ -16,6 +17,22 @@ pub async fn generate_random_string(l: usize) -> String {
     let mut rng = rand::thread_rng();
     possible.chars().choose_multiple_fill(&mut rng, &mut buffer);
     buffer.iter().collect::<String>()
+}
+
+pub async fn testchart(req: HttpRequest, data: Data<Handlebars<'static>>) -> HttpResponse {
+    match *req.method() {
+        Method::GET => {
+            let colors = vec!["white","#1DB954","hotpink","yellow","cornflowerblue","crimson","mediumorchid"];
+            let d1 = BarchartDatum::new("R&B", 7);
+            let d2 = BarchartDatum::new("New Wave Classical Ska", 2);
+            let d3 = BarchartDatum::new("Sunset Groove", 18);
+            let d4 = BarchartDatum::new("Indie Pop", 4);
+            let data: Vec<BarchartDatum> = vec![d1,d2,d3,d4];
+
+            make_barchart(data,colors,"Genres", "genreTest.svg");
+        }
+        _ => HttpResponse::NotFound().finish(),
+    }
 }
 
 /// Check if the website is up. Responds with 200 - OK to all GET requests.
