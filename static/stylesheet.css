@@ -1,53 +1,237 @@
+/*
+    stylesheet.css
+    styling for the html page
+    authors: Mary Montgomery, 
+    date of last update: 10 April 2020
+*/
+
+/* @font-face to import and use the open source "source_code" font */
+@font-face { font-family: source_code; src: url("SourceCodePro-Regular.ttf"); } 
+@font-face { font-family: source_code_bold; src: url("SourceCodePro-Bold.ttf");}
+@font-face {font-family: source_code_light; src: url("SourceCodePro-Light.ttf"); }
+
+/* we want the default html to have 
+    no margins or padding
+    a black background 
+    regular source code font text
+    and the custom blue font color  */
 html {
     margin: 0;
     padding: 0;
-    background: #20202f;
-    color: #ffffff;
+    background: black;
+    font-family: source_code;
+    color: #cfe8fa;
 }
 
+/* we want the default h1 to have
+    bold source_code font
+    font size 24
+    and the blue font color */
+h1 {
+    font-family: source_code_bold;
+    font-size: 24pt; 
+    color: #cfe8fa;
+    margin: 0px;
+}           
+
+/* we want the default h2 to have
+    bold source_code font
+    font size 18
+    and the blue font color */      
+h2 {
+    font-family: source_code_bold;
+    font-size: 18pt; 
+    color: #cfe8fa;
+    margin: 0px;
+}               
+
+/* we want the default h3 to have
+    regular source_code font
+    font size 18
+    and the blue font color */
+h3 {
+    font-family: source_code;
+    font-size: 20pt; 
+    color: #cfe8fa;
+    margin: 0px;
+}           
+
+/* we want the default h4 to have
+    regular source_code font
+    font size 16
+    and the blue font color */          
+h4 {
+    font-family: source_code;
+    font-size: 16pt; 
+    color: #cfe8fa;
+    margin: 0px;
+}               
+
+/* we want the default h5 to have
+    light source_code font
+    font size 16
+    and the blue font color */          
+h5 {
+    font-family: source_code_light;
+    font-size: 16pt; 
+    color: #cfe8fa;
+    margin: 0px;
+}               
+
+/* we want the default h6 to have
+    light source_code font
+    font size 14
+    and the blue font color */          
+h6 {
+    font-family: source_code_light;
+    font-size: 14pt; 
+    color: #cfe8fa;
+    margin: 0px;
+}       
+
+/* we want the default p to have
+    light source_code font
+    font size 12
+    and the blue font color */      
+p {
+    font-family: source_code_light;
+    font-size: 12pt; 
+    color: #cfe8fa;
+    margin: 0px;
+}   
+
+
+/*  curtain is the class that holds all of 
+    the body of the page   */ 
 .curtain {
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-content: center;
-    text-align: center;
-    font-family: Ubuntu, sans-serif;
+    justify-content: left;
+    align-content: left;
+    text-align: left;
+    font-family: source_code;
 }
 
+/*  curtain-title holds the title of the page */
 .curtain-title {
     flex: 60%;
-    font-weight: bold;
+    font-family: source_code_bold;
     font-size: 40px;
+    margin: 50px;
 }
 
+/*  curtain-logo holds the logo of the page
+    the png image    */   
+.curtain-logo {
+    flex: 60%;
+    font-family: source_code_bold;
+    font-size: 40px;
+    margin: 0px;
+}
+
+
+/*  curtain-subtitle holds the subtitle of 
+    the page (the page description)     */
 .curtain-subtitle {
-    font-size: 24px;
+    font-size: 28px;
+    margin: 50px;
 }
 
+.curtain-text {
+    font-size: 26px;
+    margin: 50px;
+}
+
+
+/* we want the default button to have
+    a blue background
+    black text
+    regular source_code font
+    size 18                     */
+.music-button, 
+.time-button,
+.login-button {
+  background-color: #cfe8fa;
+  border: 5px #cfe8fa solid;
+  color: black;
+  padding: 15px 25px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 18pt;
+  font-family: source_code_bold;
+  cursor: pointer;
+  display: inline-block;
+  margin-bottom: 0;
+  background-image: none;
+  white-space: nowrap;
+    /*line-height: 1.42857143;*/
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  text-decoration: none;
+}
+
+/* we want the button on hover to have
+    a blue outline
+    black background
+    blue colored text
+    regular source_code font
+    size 18                     */
+.music-button:hover,
+.time-button:hover,
+.login-button:hover {
+  background-color: black !important;
+  border: 5px #cfe8fa solid !important;
+  color: #cde8fa !important;
+  padding: 15px 25px !important;
+  text-align: center !important;
+  vertical-align: center !important;
+  font-size: 18pt !important;
+  font-family: source_code !important;
+  cursor: pointer;
+  display: inline-block;
+  margin-bottom: 0;
+  background-image: none;
+  white-space: nowrap;
+    /*line-height: 1.42857143;*/
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  text-decoration: none;
+}
+
+
+/*
 .btn-primary {
     color: #fff;
     background-color: #428bca;
     border-color: #357ebd;
 }
-
+*/
 .btn {
-    display: inline-block;
-    margin-bottom: 0;
-    font-weight: 400;
-    text-align: center;
-    vertical-align: middle;
-    cursor: pointer;
-    background-image: none;
-    border: 1px solid transparent;
-    white-space: nowrap;
-    padding: 6px 12px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    border-radius: 4px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+    margin: 50px;
 }
+
+
+
+
+/*how to center things*/
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  /*width: 50%;*/
+}
+
+/*we want our images to be 100% width and auto height*/
+.img {
+  max-width: 100%;
+  max-height: auto;
+  /*max-width: 50vw;*/
+}
+
+         
