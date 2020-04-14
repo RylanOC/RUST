@@ -41,7 +41,8 @@ pub async fn index(req: HttpRequest, data: Data<Handlebars<'static>>) -> HttpRes
         Method::GET => {
             let page = Curtain::new()
                 .page_title("RUST")
-                .title("Welcome to RUST!")
+                .title("R U S T")
+                .subtitle("R U S T is a data visualization tool that shows the user some of their Spotify listening habits.")
                 .with_login_button()
                 .render(data.get_ref())
                 .unwrap();
