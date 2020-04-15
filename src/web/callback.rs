@@ -1,16 +1,16 @@
-use actix_web::{HttpRequest, HttpResponse};
-use actix_web::http::{Method, header, Uri};
-use actix_web::web::Data;
 use crate::app::AppState;
-use std::str::FromStr;
-use actix_web::client::Client;
 use crate::auth::token_request::TokenRequest;
 use crate::auth::token_response::TokenResponse;
-use std::process::exit;
-use crate::spotify::PersonalizationData;
-use serde_json::{Result, Value, from_str};
 use crate::model;
-use crate::model::{Artist, Track, Items};
+use crate::model::{Artist, Items, Track};
+use crate::spotify::PersonalizationData;
+use actix_web::client::Client;
+use actix_web::http::{header, Method, Uri};
+use actix_web::web::Data;
+use actix_web::{HttpRequest, HttpResponse};
+use serde_json::{from_str, Result, Value};
+use std::process::exit;
+use std::str::FromStr;
 
 async fn get_artists(json: String) -> Vec<Artist> {
     let json_value: Value = serde_json::from_str(json.as_str()).unwrap();
@@ -20,15 +20,50 @@ async fn get_artists(json: String) -> Vec<Artist> {
     let mut artist_vec: Vec<Artist> = Vec::new();
     for json_obj in value_vec.iter() {
         let mut genres: Vec<String> = Vec::new();
-        json_obj.get("genres").unwrap().as_array().unwrap().iter().for_each(|genre| genres.push(String::from(genre.as_str().unwrap())));
+        json_obj
+            .get("genres")
+            .unwrap()
+            .as_array()
+            .unwrap()
+            .iter()
+            .for_each(|genre| genres.push(String::from(genre.as_str().unwrap())));
         let name = String::from(json_obj.get("name").unwrap().as_str().unwrap());
         let popularity = json_obj.get("popularity").unwrap().as_u64().unwrap();
         let uri = String::from(json_obj.get("uri").unwrap().as_str().unwrap());
 
-        artist_vec.push(Artist { name, genres, popularity, uri });
+        artist_vec.push(Artist {
+            name,
+            genres,
+            popularity,
+            uri,
+        });
     }
 
     artist_vec
+}
+
+// Constructs HTML list of recently listened to artists
+pub async fn generate_artist_list(artists: Vec<Artist>) -> String {
+    let mut table: String = "
+    <tr>
+        <th>Artist</th>
+        <th>Popularity</th>
+        <th>Genre</th>
+    </tr>
+    "
+    .to_owned();
+    for artist in artists {
+        table.push_str("<tr>");
+        table.push_str(&format!("<th>{name}</th>", name = &artist.name));
+        table.push_str(&format!(
+            "<th>{popularity}</th>",
+            popularity = &artist.popularity
+        ));
+        table.push_str(&format!("<th>{genre}</th>", genre = &artist.genres[0])); //TODO: generate comma seperated list from Vec
+        table.push_str("</tr>");
+    }
+
+    return table;
 }
 
 async fn get_tracks(json: String) -> Vec<Track> {
@@ -47,12 +82,20 @@ async fn get_tracks(json: String) -> Vec<Track> {
         let artist_json_arr = json_obj.get("artists").unwrap().as_array().unwrap();
 
         for artist_obj in artist_json_arr {
-            artist_names.push(String::from(artist_obj.get("name").unwrap().as_str().unwrap()));
+            artist_names.push(String::from(
+                artist_obj.get("name").unwrap().as_str().unwrap(),
+            ));
         }
 
         let popularity = json_obj.get("popularity").unwrap().as_u64().unwrap();
 
-        tracks_vec.push(Track { name, uri, artist_names, album, popularity });
+        tracks_vec.push(Track {
+            name,
+            uri,
+            artist_names,
+            album,
+            popularity,
+        });
     }
 
     tracks_vec
@@ -115,7 +158,10 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpRespons
             let tracks_vec = get_tracks(tracks_json.clone()).await;
             println!("tracks_vec: {:#?}", tracks_vec);
 
-            HttpResponse::Ok().body(format!("tokens: {:?} \n\nartists:{:?}", tokens, artists_json))
+            HttpResponse::Ok().body(format!(
+                "tokens: {:?} \n\nartists:{:?}",
+                tokens, artists_json
+            ))
         }
         _ => HttpResponse::MethodNotAllowed().finish(),
     }
