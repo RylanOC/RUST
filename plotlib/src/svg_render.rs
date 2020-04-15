@@ -42,7 +42,7 @@ where
 }
 
 pub fn draw_x_axis(a: &axis::ContinuousAxis, face_width: f64) -> node::element::Group {
-    let axis_line = horizontal_line(0.0, 0.0, face_width, "black");
+    let axis_line = horizontal_line(0.0, 0.0, face_width, "#cfe8fa");
 
     let mut ticks = node::element::Group::new();
     let mut labels = node::element::Group::new();
@@ -54,7 +54,7 @@ pub fn draw_x_axis(a: &axis::ContinuousAxis, face_width: f64) -> node::element::
             .set("y1", 0)
             .set("x2", tick_pos)
             .set("y2", 10)
-            .set("stroke", "black")
+            .set("stroke", "#cfe8fa")
             .set("stroke-width", 1);
         ticks.append(tick_mark);
 
@@ -63,6 +63,7 @@ pub fn draw_x_axis(a: &axis::ContinuousAxis, face_width: f64) -> node::element::
             .set("y", 20)
             .set("text-anchor", "middle")
             .set("font-size", 12)
+            .set("fill", "#cfe8fa")
             .add(node::Text::new(tick.to_string()));
         labels.append(tick_label);
     }
@@ -72,6 +73,7 @@ pub fn draw_x_axis(a: &axis::ContinuousAxis, face_width: f64) -> node::element::
         .set("y", 30)
         .set("text-anchor", "middle")
         .set("font-size", 12)
+        .set("fill", "#cfe8fa")
         .add(node::Text::new(a.get_label()));
 
     node::element::Group::new()
@@ -82,7 +84,7 @@ pub fn draw_x_axis(a: &axis::ContinuousAxis, face_width: f64) -> node::element::
 }
 
 pub fn draw_y_axis(a: &axis::ContinuousAxis, face_height: f64) -> node::element::Group {
-    let axis_line = vertical_line(0.0, 0.0, -face_height, "black");
+    let axis_line = vertical_line(0.0, 0.0, -face_height, "#cfe8fa");
 
     let mut ticks = node::element::Group::new();
     let mut labels = node::element::Group::new();
@@ -96,7 +98,7 @@ pub fn draw_y_axis(a: &axis::ContinuousAxis, face_height: f64) -> node::element:
             .set("y1", -tick_pos)
             .set("x2", -10)
             .set("y2", -tick_pos)
-            .set("stroke", "black")
+            .set("stroke", "#cfe8fa")
             .set("stroke-width", 1);
         ticks.append(tick_mark);
 
@@ -106,6 +108,7 @@ pub fn draw_y_axis(a: &axis::ContinuousAxis, face_height: f64) -> node::element:
             .set("text-anchor", "end")
             .set("dominant-baseline", "middle")
             .set("font-size", y_tick_font_size)
+            .set("fill", "#cfe8fa")
             .add(node::Text::new(tick.to_string()));
         labels.append(tick_label);
     }
@@ -125,6 +128,7 @@ pub fn draw_y_axis(a: &axis::ContinuousAxis, face_height: f64) -> node::element:
         .set("y", y_label_offset - f64::from(y_label_font_size))
         .set("text-anchor", "middle")
         .set("font-size", y_label_font_size)
+        .set("fill", "#cfe8fa")
         .set(
             "transform",
             format!("rotate(-90 {} {})", x_offset, y_label_offset),
@@ -144,7 +148,7 @@ pub fn draw_categorical_x_axis(a: &axis::CategoricalAxis, face_width: f64) -> no
         .set("y1", 0)
         .set("x2", face_width)
         .set("y2", 0)
-        .set("stroke", "black")
+        .set("stroke", "#cfe8fa")
         .set("stroke-width", 1);
 
     let mut ticks = node::element::Group::new();
@@ -159,7 +163,7 @@ pub fn draw_categorical_x_axis(a: &axis::CategoricalAxis, face_width: f64) -> no
             .set("y1", 0)
             .set("x2", tick_pos)
             .set("y2", 10)
-            .set("stroke", "black")
+            .set("stroke", "#cfe8fa")
             .set("stroke-width", 1);
         ticks.append(tick_mark);
 
@@ -168,6 +172,7 @@ pub fn draw_categorical_x_axis(a: &axis::CategoricalAxis, face_width: f64) -> no
             .set("y", 20)
             .set("text-anchor", "middle")
             .set("font-size", 12)
+            .set("fill", "#cfe8fa")
             .add(node::Text::new(tick.to_owned()));
         labels.append(tick_label);
     }
@@ -177,6 +182,7 @@ pub fn draw_categorical_x_axis(a: &axis::CategoricalAxis, face_width: f64) -> no
         .set("y", 30)
         .set("text-anchor", "middle")
         .set("font-size", 12)
+        .set("fill", "#cfe8fa")
         .add(node::Text::new(a.get_label()));
 
     node::element::Group::new()
@@ -262,7 +268,7 @@ pub fn draw_face_bars(
             .set("width", width)
             .set("height", count_scaled)
             .set("fill", style.get_fill())
-            .set("stroke", "black");
+            .set("stroke", "#cfe8fa");
         group.append(rect);
     }
 
@@ -349,7 +355,7 @@ where
             .set("width", box_width)
             .set("height", box_end - box_start)
             .set("fill", style.get_fill())
-            .set("stroke", "black"),
+            .set("stroke", "#cfe8fa"),
     );
 
     let mid_line = -value_to_face_offset(median, y_axis, face_height);
@@ -360,7 +366,7 @@ where
             .set("y1", mid_line)
             .set("x2", tick_pos + (box_width / 2.))
             .set("y2", mid_line)
-            .set("stroke", "black"),
+            .set("stroke", "#cfe8fa"),
     );
 
     let (min, max) = utils::range(d);
@@ -374,7 +380,7 @@ where
             .set("y1", whisker_bottom)
             .set("x2", tick_pos)
             .set("y2", box_end)
-            .set("stroke", "black"),
+            .set("stroke", "#cfe8fa"),
     );
 
     group.append(
@@ -383,7 +389,7 @@ where
             .set("y1", whisker_top)
             .set("x2", tick_pos)
             .set("y2", box_start)
-            .set("stroke", "black"),
+            .set("stroke", "#cfe8fa"),
     );
 
     group
@@ -420,7 +426,7 @@ where
             .set("width", box_width)
             .set("height", box_end - box_start)
             .set("fill", style.get_fill())
-            .set("stroke", "black"),
+            .set("stroke", "#cfe8fa"),
     );
 
     group
