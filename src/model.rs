@@ -10,16 +10,22 @@ pub enum ImageData {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Artist {
-    pub external_urls: HashMap<String, String>,
-    pub followers: HashMap<String, Option<u32>>,
-    pub genres: Vec<String>,
-    pub href: String,
-    pub id: String,
-    pub images: Vec<HashMap<String, ImageData>>,
+    // pub external_urls: HashMap<String, String>,
+    // pub followers: HashMap<String, Option<u32>>,
     pub name: String,
-    pub popularity: u32,
-    //pub type_str: String,
-    pub uri: String
+    pub genres: Vec<String>,
+    // pub href: String,
+    // pub id: String,
+    // pub images: Vec<HashMap<String, ImageData>>,
+    pub popularity: u64,
+    // pub type_str: String,
+    // pub uri: String
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Track {
+    pub name: String,
+    pub uri: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

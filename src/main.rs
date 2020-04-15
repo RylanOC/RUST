@@ -4,9 +4,9 @@ mod app;
 mod env;
 mod spotify;
 mod templates;
-mod web;
 mod auth;
 mod model;
+mod web;
 
 #[macro_use]
 extern crate log;
@@ -47,6 +47,7 @@ async fn main() -> io::Result<()> {
     h.set_strict_mode(true);
     h.register_templates_directory(".hbs", "templates").unwrap();
     let data = AppState::new(Arc::new(h));
+    //let handlebars_ref = a_web::Data::new(h);
     info!("Handlebars templates registered.");
 
     HttpServer::new(move || {
@@ -54,6 +55,7 @@ async fn main() -> io::Result<()> {
             .wrap(middleware::Logger::default())
             // logger should always be last middleware added.
             .data(data.clone())
+            //.data(handlebars_ref.clone())
             .service(afs::Files::new("static/", "static/"))
             .service(a_web::resource("/is_up").to(  is_up::is_up))
             .service(a_web::resource("/").to(index::index))
@@ -61,6 +63,7 @@ async fn main() -> io::Result<()> {
             .service(a_web::resource("/callback").to(callback::callback))
             .default_service(a_web::route().to(|| HttpResponse::NotFound()))
     })
+
     .bind_openssl(&*env::ADDRESS, builder)?
     .run()
     .await
