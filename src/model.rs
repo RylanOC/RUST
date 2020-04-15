@@ -19,13 +19,16 @@ pub struct Artist {
     // pub images: Vec<HashMap<String, ImageData>>,
     pub popularity: u64,
     // pub type_str: String,
-    // pub uri: String
+    pub uri: String
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Track {
     pub name: String,
     pub uri: String,
+    pub artist_names: Vec<String>,
+    pub album: String,
+    pub popularity: u64,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

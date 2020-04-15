@@ -12,11 +12,6 @@ use serde_json::{Result, Value, from_str};
 use crate::model;
 use crate::model::{Artist, Track, Items};
 
-// async fn extract_artists(artists: String) -> Result<Value> {
-//     let items: Value = from_str(artists.as_str())?;
-//     Ok(items)
-// }
-
 async fn get_artists(json: String) -> Vec<Artist> {
     let json_value: Value = serde_json::from_str(json.as_str()).unwrap();
     let artists_map = json_value.as_object().unwrap();
@@ -28,8 +23,9 @@ async fn get_artists(json: String) -> Vec<Artist> {
         json_obj.get("genres").unwrap().as_array().unwrap().iter().for_each(|genre| genres.push(String::from(genre.as_str().unwrap())));
         let name = String::from(json_obj.get("name").unwrap().as_str().unwrap());
         let popularity = json_obj.get("popularity").unwrap().as_u64().unwrap();
+        let uri = String::from(json_obj.get("uri").unwrap().as_str().unwrap());
 
-        artist_vec.push(Artist { name, genres, popularity });
+        artist_vec.push(Artist { name, genres, popularity, uri });
     }
 
     artist_vec
@@ -45,7 +41,18 @@ async fn get_tracks(json: String) -> Vec<Track> {
         let name = String::from(json_obj.get("name").unwrap().as_str().unwrap());
         let uri = String::from(json_obj.get("uri").unwrap().as_str().unwrap());
 
-        tracks_vec.push(Track { name, uri });
+        let album_json_object = json_obj.get("album").unwrap();
+        let album = String::from(album_json_object.get("name").unwrap().as_str().unwrap());
+        let mut artist_names: Vec<String> = Vec::new();
+        let artist_json_arr = json_obj.get("artists").unwrap().as_array().unwrap();
+
+        for artist_obj in artist_json_arr {
+            artist_names.push(String::from(artist_obj.get("name").unwrap().as_str().unwrap()));
+        }
+
+        let popularity = json_obj.get("popularity").unwrap().as_u64().unwrap();
+
+        tracks_vec.push(Track { name, uri, artist_names, album, popularity });
     }
 
     tracks_vec
@@ -87,7 +94,7 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpRespons
                 .collect::<String>();
 
             let artist_vec = get_artists(artists_json.clone()).await;
-            println!("artist_vec: {:#?}", artist_vec);
+            // println!("artist_vec: {:#?}", artist_vec);
 
             let tracks_json = PersonalizationData::Tracks
                 .make_req(&tokens)
