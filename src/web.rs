@@ -1,5 +1,7 @@
 use crate::templates::Curtain;
+use crate::templates::ImageView;
 use crate::barchart_maker;
+use crate::histogram_maker;
 use actix_web::http::Method;
 use actix_web::web::Data;
 use actix_web::{http, HttpRequest, HttpResponse};
@@ -23,13 +25,25 @@ pub async fn testchart(req: HttpRequest, data: Data<Handlebars<'static>>) -> Htt
     match *req.method() {
         Method::GET => {
             let colors = vec!["white","#1DB954","hotpink","yellow","cornflowerblue","crimson","mediumorchid"];
-            let d1 = BarchartDatum::new("R&B", 7);
-            let d2 = BarchartDatum::new("New Wave Classical Ska", 2);
-            let d3 = BarchartDatum::new("Sunset Groove", 18);
-            let d4 = BarchartDatum::new("Indie Pop", 4);
-            let data: Vec<BarchartDatum> = vec![d1,d2,d3,d4];
+            let d1 = barchart_maker::BarchartDatum::new("R-B", 7.0);
+            let d2 = barchart_maker::BarchartDatum::new("New Wave Classical Ska", 2.0);
+            let d3 = barchart_maker::BarchartDatum::new("Sunset Groove", 18.0);
+            let d4 = barchart_maker::BarchartDatum::new("Indie Pop", 4.0);
+            let data_points: Vec<barchart_maker::BarchartDatum> = vec![d1,d2,d3,d4];
 
-            make_barchart(data,colors,"Genres", "genreTest.svg");
+            barchart_maker::make_barchart(data_points,colors,"Genres", "genreTest.svg");
+
+            let num_data = vec![0.1, 0.1, 0.2, 0.7, 0.75, 0.72, 0.9, 0.91, 0.92];
+
+            histogram_maker::make_histogram(num_data, "num_data", "numTest.svg");
+
+            let page = ImageView::new()
+                .page_title("Test chart maker")
+                .label("Genres")
+                .image("genreTest.svg")
+                .render(data.get_ref())
+                .unwrap();
+            HttpResponse::Ok().body(page)
         }
         _ => HttpResponse::NotFound().finish(),
     }

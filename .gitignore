@@ -12,3 +12,7 @@ Cargo.lock
 /.idea
 *.bash
 *.pem
+
+genreTest.svg
+
+numTest.svg

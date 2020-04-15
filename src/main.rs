@@ -2,7 +2,7 @@
 
 mod templates;
 mod web;
-mod barchart_maker;
+mod chart_maker;
 
 // #[macro_use] extern crate actix_web;
 #[macro_use]
