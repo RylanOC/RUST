@@ -12,10 +12,10 @@ use serde_json::{Result, Value, from_str};
 use crate::model;
 use crate::model::{Artist, Items};
 
-async fn extract_artists(artists: String) -> Result<Vec<Artist>> {
-    let items: model::Items = from_str(artists.as_str())?;
-    Ok(items.items)
-}
+// async fn extract_artists(artists: String) -> Result<Value> {
+//     let items: Value = from_str(artists.as_str())?;
+//     Ok(items)
+// }
 
 /// Resource GET by spotify login response
 pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpResponse {
@@ -51,32 +51,33 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpRespons
                 .iter()
                 .map(|byte| *byte as char)
                 .collect::<String>();
-            //artists.replace(r#"types"#, "type_str");
 
-            let items = extract_artists(artists.clone()).await.unwrap();
-            //let artists = items.artists;
+            println!("artists: {:?}", artists);
 
-            //let artists_vec = value.as_object().unwrap().get("items").unwrap();
-            // let artists_map = value.as_object().unwrap();
-            // let artists_vec = &artists_map.get("items").unwrap().as_array().unwrap();
-            //
-            // println!("artists len: {}", artists_vec.len());
-            // for obj in artists_vec.iter() {
-            //     println!("for {}", obj.get("name").unwrap());
-            //     println!("external urls: {}", obj.get("external_urls").unwrap().get("spotify").unwrap());
-            //     println!("followers: {}", obj.get("followers").unwrap().get("total").unwrap());
-            //     println!("genres: {:?}", obj.get("genres").unwrap().as_array().unwrap().iter().map(|value| value.as_str().unwrap()).collect::<String>());
-            // }
+            let json_value: Value = serde_json::from_str(artists.as_str()).unwrap();
+            let artists_map = json_value.as_object().unwrap();
+            let artist_data_vec = &artists_map.get("items").unwrap().as_array().unwrap();
+            println!("artists_data_vec: {:#?}", artist_data_vec);
 
-            //let items = &value["items"];
-            //println!("artists_map: {:#?}", artists_vec);
-            for artist in items {
-                println!("artist: {:?}", artist);
+            let mut artist_name_vec = Vec::new();
+            println!("artists len: {}", artist_data_vec.len());
+            for obj in artist_data_vec.iter() {
+                artist_name_vec.push(obj.get("name").unwrap().as_str().unwrap());
+                println!("pushed {} into vec", obj.get("name").unwrap());
+
+                // Extra JSON extracting examples
+                // println!("external urls: {}", obj.get("external_urls").unwrap().get("spotify").unwrap());
+                // println!("followers: {}", obj.get("followers").unwrap().get("total").unwrap());
+                // println!("genres: {:?}", obj.get("genres").unwrap().as_array().unwrap().iter().map(|value| value.as_str().unwrap()).collect::<String>());
             }
+
+            println!("artist_name_vec: {:#?}", artist_name_vec);
+            // for artist in artist_name_vec {
+            //     println!("artist: {:?}", artist);
+            // }
 
             HttpResponse::Ok().body(format!("tokens: {:?} \n\nartists:{:?}", tokens, artists))
         }
         _ => HttpResponse::MethodNotAllowed().finish(),
     }
 }
-
