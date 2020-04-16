@@ -1,11 +1,13 @@
 use crate::app::AppState;
 use crate::auth::token_response::Tokens;
+use crate::env;
 use crate::model::artists::ArtistsVec;
 use crate::model::tracks::TracksVec;
 use crate::spotify::{PersonalizationData, PersonalizationParams};
-use crate::templates::ResultsPage;
+use crate::templates::{Redirect, ResultsPage};
 use crate::web::TOKENS_COOKIE_NAME;
 use actix_session::Session;
+use actix_web::http::header;
 use actix_web::web::{Data, Query};
 use actix_web::{HttpRequest, HttpResponse};
 use rspotify::senum::TimeRange;
@@ -22,6 +24,7 @@ pub async fn results(
     request: HttpRequest,
     session: Session,
 ) -> HttpResponse {
+    let hbs_reg = &app_data.template_registry;
     let cookies = session.get(TOKENS_COOKIE_NAME);
     if cookies.is_err() {
         return HttpResponse::InternalServerError().body(cookies.unwrap_err().to_string());
@@ -29,7 +32,10 @@ pub async fn results(
 
     let opt = cookies.unwrap();
     if opt.is_none() {
-        return HttpResponse::InternalServerError().body("cookies lost");
+        let dest = format!("https://{}", &*env::ADDRESS);
+        return HttpResponse::PermanentRedirect()
+            .header(header::LOCATION, dest.clone())
+            .body(Redirect::new(dest).render(&hbs_reg).unwrap());
     }
 
     let query_string = request.query_string();
@@ -81,7 +87,6 @@ pub async fn results(
         })
         .unwrap();
 
-    let hbs_reg = &app_data.template_registry;
     let webpage = ResultsPage::new(artists, tracks).render(hbs_reg).unwrap();
 
     HttpResponse::Ok().body(webpage)
