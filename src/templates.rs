@@ -1,3 +1,4 @@
+use crate::model::Artist;
 use handlebars::{Handlebars, RenderError};
 
 /// Curtain page template structure.
@@ -12,7 +13,7 @@ pub struct Curtain {
     /// Is there a login button?
     pub login_button: String,
     // List of recently listened to artists
-    pub artist_list: String,
+    pub artist_list: Vec<Artist>,
 }
 
 impl Curtain {
@@ -46,8 +47,8 @@ impl Curtain {
     }
 
     /// Builder pattern function to set the artist list in this curtain.
-    pub fn artist_list(mut self, list: impl Into<String>) -> Self {
-        self.artist_list = list.into();
+    pub fn artist_list(mut self, list: Vec<Artist>) -> Self {
+        self.artist_list = list;
         self
     }
 
