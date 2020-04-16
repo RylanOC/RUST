@@ -1,7 +1,6 @@
 use actix_web::http::Uri;
 use crate::auth::token_response::Tokens;
 use actix_web::client::{Client, ClientRequest};
-use actix_web::http::header;
 
 const SPOTIFY_ENDPOINT: &'static str = "https://api.spotify.com/v1/me/top/";
 
@@ -41,5 +40,4 @@ impl PersonalizationData {
             .bearer_auth(&tokens.access_token)
     }
 
-    //pub fn parse_json(self, json: String) ->
 }

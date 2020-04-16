@@ -19,7 +19,6 @@ const DEFAULT_CLIENT_ID: &'static str = "1de388fded5c43b68f60fcec9a81c956";
 const CLIENT_ID_ENV_VAR: &'static str = "CLIENT_ID"; // will break env.bash if changed.
 
 /// Client secret given by Spotify
-const DEFAULT_CLIENT_SECRET: &'static str = "INVALID SECRET";
 const CLIENT_SECRET_ENV_VAR: &'static str = "CLIENT_SECRET"; // will break env.bash if changed.
 
 /// Default cert file location. Can be overridden with "CERT_FILE" env variable.
