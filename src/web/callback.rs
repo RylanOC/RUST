@@ -22,26 +22,14 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>, session: Sessi
 
             let response = TokenRequest::make_request(code).await;
             if response.is_error() {
-                error!(target: "RUST::callback", "Response body was error: {:?}",
+                error!(target: "RUST::callback", "Token Response body was error: {:?}",
                        response.error.unwrap());
                 exit(1);
             }
             let tokens = response.unwrap();
 
-            let artists = PersonalizationData::Artists
-                .make_req(&tokens)
-                .send()
-                .await
-                .map_err(|e| {
-                    error!(target: "RUST::callback", "Error getting artist data: {:?}", e);
-                    exit(1);
-                })
-                .unwrap()
-                .json::<ArtistsVec>()
-                .await
-                .unwrap();
-
-            println!("{:#?}", artists);
+            // store the Spotify token in a cookie.
+            session.set("tokens", tokens).unwrap();
 
             let hbs_reg = &app_data.template_registry;
             let page = Curtain::new()

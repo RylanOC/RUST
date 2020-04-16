@@ -4,17 +4,15 @@
 <head>
     <title>{{page_title}}</title>
     <meta charset="UTF-8">
-    <!--link rel="stylesheet" type="text/css" href="static/stylesheet.css" media="screen"-->
-    <link rel="stylesheet" href="static/stylesheet.css">
+    <link rel="stylesheet" type="text/css" href="static/stylesheet.css" media="screen">
+<!--    <link rel="stylesheet" type="text/css" href="static/stylesheet.css">-->
 </head>
 
 <body>
     <div class="curtain">
-        <!--
         <div class="curtain-title">
             {{title}}
         </div>
-        -->
         <div class="curtain-logo">
             <img src="static/new_logo_music_note.png" width=60% height=50% class=left>
         </div>
@@ -27,52 +25,6 @@
             <a href="/login" class="login-button">LOGIN TO SPOTIFY</a>
         </div>
         {{/if}}
-        <div class="curtain-text">
-            <br>
-            <h3>See what you've been listening to:</h3>
-        </div>
-        <div class="btn">
-            <button type="button" class="artist music-button" id="artist-music-button"
-                onclick="musicSelection(id)">ARTISTS</button>
-            <button type="button" class="song music-button" id="song-music-button"
-                onclick="musicSelection(id)">SONGS</button>
-            <button type="button" class="album music-button" id="album-music-button"
-                onclick="musicSelection(id)">ALBUMS</button>
-            <button type="button" class="genre music-button" id="genre-music-button"
-                onclick="musicSelection(id)">GENRES</button>
-        </div>
-        <div class="curtain-text">
-            <br>
-            <h3>Through what timeline:</h3>
-        </div>
-        <div class="btn">
-            <button type="button" class="short-term time-button" id="short-term-time-button"
-                onclick="timeSelection(id)">SHORT TERM</button>
-            <button type="button" class="medium-term time-button" id="medium-term-time-button"
-                onclick="timeSelection(id)">MEDIUM TERM</button>
-            <button type="button" class="long-term time-button" id="long-term-time-button"
-                onclick="timeSelection(id)">LONG TERM</button>
-        </div>
-
-        <table>
-            <tr>
-                <th>Artist Name</th>
-                <th>Artist Popularity</th>
-                <th>Genres</th>
-            </tr>
-            <!--TODO: syle table-->
-            {{#each artist_list}}
-            <tr>
-                <td>{{this.name}}</td>
-                <td>{{this.popularity}}</td>
-                <td>{{this.genres}}</td>
-            </tr>
-            {{else}}
-            {{/each}}
-
-        </table>
-        <!-- all the needed javascript is in index.js -->
-        <script src="static/index.js"> </script>
     </div>
 </body>
 

@@ -26,21 +26,6 @@ pub struct Tokens {
 }
 
 impl TokenResponse {
-    // old piece of code from spotify tops
-    /* pub fn new_error(error: String, error_description: String) -> TokenResponse {
-       TokenResponse {
-           error: Some(AuthenticationError {
-               error,
-               error_description,
-           }),
-           access_token: None,
-           refresh_token: None,
-           token_type: None,
-           expires_in: None,
-           scope: None,
-       }
-    } */
-
     #[inline]
     pub fn is_error(&self) -> bool {
         self.error.is_some()
