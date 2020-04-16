@@ -70,8 +70,11 @@ async fn main() -> io::Result<()> {
             .service(a_web::resource("/login").to(login::login))
             .service(a_web::resource("/callback").to(callback::callback))
             // use guard here to require all requests to results are GET
-            .service(a_web::resource("/results").guard(guard::Get())
-                .to(results::results))
+            .service(
+                a_web::resource("/results")
+                    .guard(guard::Get())
+                    .to(results::results),
+            )
             .default_service(a_web::route().to(p404::p404))
     })
     .bind_openssl(&*env::ADDRESS, builder)?

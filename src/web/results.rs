@@ -7,17 +7,21 @@ use crate::templates::ResultsPage;
 use crate::web::TOKENS_COOKIE_NAME;
 use actix_session::Session;
 use actix_web::web::{Data, Query};
-use actix_web::{HttpResponse, HttpRequest};
-use std::process::exit;
+use actix_web::{HttpRequest, HttpResponse};
 use rspotify::senum::TimeRange;
+use std::process::exit;
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct ResultsQuery {
-    pub time: Option<String>
+    pub time: Option<String>,
 }
 
 /// Results page function. Makes calls to spotify
-pub async fn results(app_data: Data<AppState>, request: HttpRequest, session: Session) -> HttpResponse {
+pub async fn results(
+    app_data: Data<AppState>,
+    request: HttpRequest,
+    session: Session,
+) -> HttpResponse {
     let cookies = session.get(TOKENS_COOKIE_NAME);
     if cookies.is_err() {
         return HttpResponse::InternalServerError().body(cookies.unwrap_err().to_string());
@@ -36,15 +40,28 @@ pub async fn results(app_data: Data<AppState>, request: HttpRequest, session: Se
     }
     let query = query.unwrap().into_inner();
 
-    let time_range: TimeRange = query.time.map(|s| {
-        if s == "short" {TimeRange::ShortTerm}
-        else if s == "long" {TimeRange::LongTerm }
-        else {TimeRange::MediumTerm}
-    }).unwrap_or(TimeRange::MediumTerm);
+    let time_range: TimeRange = query
+        .time
+        .map(|s| {
+            if s == "short" {
+                TimeRange::ShortTerm
+            } else if s == "long" {
+                TimeRange::LongTerm
+            } else {
+                TimeRange::MediumTerm
+            }
+        })
+        .unwrap_or(TimeRange::MediumTerm);
 
     let tokens: Tokens = opt.unwrap();
-    let artist_params = PersonalizationParams::new().limit(50).unwrap().time_range(time_range);
-    let track_params = PersonalizationParams::new().limit(10).unwrap().time_range(time_range);
+    let artist_params = PersonalizationParams::new()
+        .limit(50)
+        .unwrap()
+        .time_range(time_range);
+    let track_params = PersonalizationParams::new()
+        .limit(10)
+        .unwrap()
+        .time_range(time_range);
 
     let artists: ArtistsVec = PersonalizationData::Artists
         .get_data::<ArtistsVec>(&tokens, &artist_params)
