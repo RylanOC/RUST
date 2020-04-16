@@ -6,17 +6,18 @@ use crate::spotify::{PersonalizationData, PersonalizationParams};
 use crate::templates::ResultsPage;
 use crate::web::TOKENS_COOKIE_NAME;
 use actix_session::Session;
-use actix_web::web::Data;
+use actix_web::web::{Data, Query};
 use actix_web::{HttpResponse, HttpRequest};
 use std::process::exit;
 use rspotify::senum::TimeRange;
 
+#[derive(Clone, Serialize, Deserialize, Debug)]
+pub struct ResultsQuery {
+    pub time: Option<String>
+}
+
 /// Results page function. Makes calls to spotify
 pub async fn results(app_data: Data<AppState>, request: HttpRequest, session: Session) -> HttpResponse {
-    let query = request.uri().query().unwrap_or("medium");
-    println!("head: {:#?}", request.head());
-    println!("headers: {:#?}", request.headers());
-
     let cookies = session.get(TOKENS_COOKIE_NAME);
     if cookies.is_err() {
         return HttpResponse::InternalServerError().body(cookies.unwrap_err().to_string());
@@ -27,16 +28,19 @@ pub async fn results(app_data: Data<AppState>, request: HttpRequest, session: Se
         return HttpResponse::InternalServerError().body("cookies lost");
     }
 
-
-    let mut time_range: TimeRange = TimeRange::MediumTerm;
-    match query {
-        "short" => time_range = TimeRange::ShortTerm,
-        "medium" => time_range = TimeRange::MediumTerm,
-        "long" => time_range = TimeRange::LongTerm,
-        _ => time_range = TimeRange::MediumTerm
+    let query_string = request.query_string();
+    let query = Query::<ResultsQuery>::from_query(query_string)
+        .map_err(|e| HttpResponse::BadRequest().body(e.to_string()));
+    if query.is_err() {
+        return query.unwrap_err();
     }
+    let query = query.unwrap().into_inner();
 
-    println!("query: {:?}", query);
+    let time_range: TimeRange = query.time.map(|s| {
+        if s == "short" {TimeRange::ShortTerm}
+        else if s == "long" {TimeRange::LongTerm }
+        else {TimeRange::MediumTerm}
+    }).unwrap_or(TimeRange::MediumTerm);
 
     let tokens: Tokens = opt.unwrap();
     let artist_params = PersonalizationParams::new().limit(50).unwrap().time_range(time_range);

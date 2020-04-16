@@ -121,10 +121,4 @@ function timeSelection(button_id) {
     /*  user_time_selection is just one word: short, medium, or long */
     user_time_selection = selection_arr[0];
     console.log(user_time_selection);
-
-    /*will need to return this information to send it somewhere*/
-
-    var request = new XMLHttpRequest();
-    request.open('GET', '/results&timeframe=' + user_time_selection, true);
-    request.send();
 }
