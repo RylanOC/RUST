@@ -1,6 +1,6 @@
 #![warn(missing_copy_implementations)]
+#![allow(dead_code)]
 
-// removed model in favor of rspotify's model.
 
 mod app;
 mod auth;

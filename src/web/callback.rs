@@ -8,6 +8,7 @@ use std::process::exit;
 use actix_session::Session;
 use actix_web::http::header;
 use crate::env;
+use crate::web::TOKENS_COOKIE_NAME;
 
 /// Resource GET by spotify login response
 pub async fn callback(req: HttpRequest, app_data: Data<AppState>, session: Session) -> HttpResponse {
@@ -29,7 +30,7 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>, session: Sessi
             let tokens = response.unwrap();
 
             // store the Spotify token in a cookie.
-            session.set("tokens", tokens).unwrap();
+            session.set(TOKENS_COOKIE_NAME, tokens).unwrap();
 
             let results_page = format!("https://{}/results", &*env::ADDRESS);
             let hbs_reg = &app_data.template_registry;

@@ -1,6 +1,8 @@
 use crate::auth::token_response::Tokens;
 use actix_web::client::{Client, ClientRequest};
 use actix_web::http::Uri;
+use serde::Deserialize;
+use serde::de::DeserializeOwned;
 
 const SPOTIFY_ENDPOINT: &'static str = "https://api.spotify.com/v1/me/top/";
 
@@ -39,5 +41,16 @@ impl PersonalizationData {
         client
             .get(self.get_endpoint())
             .bearer_auth(&tokens.access_token)
+    }
+
+    /// Get a spotify data as deserialized json.
+    pub async fn get_data<T: DeserializeOwned>(self, tokens: &Tokens) -> Result<T, String> {
+        self.make_req(tokens)
+            .send()
+            .await
+            .map_err(|err| err.to_string())?
+            .json::<T>()
+            .await
+            .map_err(|e| e.to_string())
     }
 }
