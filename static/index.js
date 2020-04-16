@@ -123,4 +123,8 @@ function timeSelection(button_id) {
     console.log(user_time_selection);
 
     /*will need to return this information to send it somewhere*/
+
+    var request = new XMLHttpRequest();
+    request.open('GET', '/results&timeframe=' + user_time_selection, true);
+    request.send();
 }

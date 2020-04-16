@@ -11,11 +11,7 @@ use actix_web::{HttpRequest, HttpResponse};
 use std::process::exit;
 
 /// Resource GET by spotify login response
-pub async fn callback(
-    req: HttpRequest,
-    app_data: Data<AppState>,
-    session: Session,
-) -> HttpResponse {
+pub async fn callback(req: HttpRequest, app_data: Data<AppState>, session: Session) -> HttpResponse {
     match *req.method() {
         Method::GET => {
             let code = req
