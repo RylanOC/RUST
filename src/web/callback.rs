@@ -1,17 +1,21 @@
 use crate::app::AppState;
 use crate::auth::token_request::TokenRequest;
-use crate::templates::{Redirect};
+use crate::env;
+use crate::templates::Redirect;
+use crate::web::TOKENS_COOKIE_NAME;
+use actix_session::Session;
+use actix_web::http::header;
 use actix_web::http::Method;
 use actix_web::web::Data;
 use actix_web::{HttpRequest, HttpResponse};
 use std::process::exit;
-use actix_session::Session;
-use actix_web::http::header;
-use crate::env;
-use crate::web::TOKENS_COOKIE_NAME;
 
 /// Resource GET by spotify login response
-pub async fn callback(req: HttpRequest, app_data: Data<AppState>, session: Session) -> HttpResponse {
+pub async fn callback(
+    req: HttpRequest,
+    app_data: Data<AppState>,
+    session: Session,
+) -> HttpResponse {
     match *req.method() {
         Method::GET => {
             let code = req
@@ -34,9 +38,7 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>, session: Sessi
 
             let results_page = format!("https://{}/results", &*env::ADDRESS);
             let hbs_reg = &app_data.template_registry;
-            let page = Redirect::new(&results_page)
-                .render(hbs_reg)
-                .unwrap();
+            let page = Redirect::new(&results_page).render(hbs_reg).unwrap();
             HttpResponse::PermanentRedirect()
                 .header(header::LOCATION, results_page)
                 .body(page)

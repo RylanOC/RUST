@@ -17,8 +17,9 @@ impl PersonalizationParams {
     /// Builder pattern method to set the number of items to retrive;
     /// Returns none if limit is not in range 1 to 50 (inclusive).
     pub fn limit(mut self, limit: u32) -> Option<Self> {
-        if limit > 50 || limit < 1 {None}
-        else {
+        if limit > 50 || limit < 1 {
+            None
+        } else {
             self.limit = Some(limit);
             Some(self)
         }
@@ -35,5 +36,4 @@ impl PersonalizationParams {
         self.time_range = Some(time_range);
         self
     }
-
 }

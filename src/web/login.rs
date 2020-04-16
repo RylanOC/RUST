@@ -1,12 +1,12 @@
+use crate::app::AppState;
 use crate::auth;
 use crate::env;
+use crate::templates::Redirect;
 use actix_web::http::{header, Method, PathAndQuery, Uri};
+use actix_web::web::Data;
 use actix_web::{HttpRequest, HttpResponse};
 use rand::seq::IteratorRandom;
 use std::str::FromStr;
-use crate::templates::Redirect;
-use actix_web::web::Data;
-use crate::app::AppState;
 
 /// Generates a random string of length `l`, of any capital letters, lowercase letters,
 /// and numbers.
@@ -46,9 +46,7 @@ pub async fn login(req: HttpRequest, app_data: Data<AppState>) -> HttpResponse {
                 .to_string();
 
             let hbs_reg = &app_data.template_registry;
-            let page = Redirect::new(&uri)
-                .render(hbs_reg)
-                .unwrap();
+            let page = Redirect::new(&uri).render(hbs_reg).unwrap();
 
             HttpResponse::PermanentRedirect()
                 .header(header::LOCATION, uri)

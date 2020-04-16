@@ -42,8 +42,11 @@ impl PersonalizationData {
     }
 
     /// Get a spotify data as deserialized json.
-    pub async fn get_data<T: DeserializeOwned>(self, tokens: &Tokens, params: &PersonalizationParams)
-        -> Result<T, String> {
+    pub async fn get_data<T: DeserializeOwned>(
+        self,
+        tokens: &Tokens,
+        params: &PersonalizationParams,
+    ) -> Result<T, String> {
         self.make_req(tokens, params)
             .send()
             .await

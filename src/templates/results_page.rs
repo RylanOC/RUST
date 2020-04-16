@@ -6,7 +6,7 @@ use handlebars::{Handlebars, RenderError};
 pub struct ResultsPage {
     pub page_title: String,
     pub artists: ArtistsVec,
-    pub tracks: TracksVec
+    pub tracks: TracksVec,
 }
 
 impl ResultsPage {
@@ -15,7 +15,7 @@ impl ResultsPage {
         Self {
             page_title: "Results".to_owned(),
             artists: artist_data,
-            tracks: track_data
+            tracks: track_data,
         }
     }
 

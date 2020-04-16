@@ -29,11 +29,11 @@ use crate::app::AppState;
 use crate::web::*;
 use std::sync::Arc;
 
-use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
 use actix_session::CookieSession;
+use actix_web::guard;
+use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
 use rand::rngs::OsRng;
 use rand::RngCore;
-use actix_web::guard;
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
@@ -69,9 +69,11 @@ async fn main() -> io::Result<()> {
             .service(a_web::resource("/login").to(login::login))
             .service(a_web::resource("/callback").to(callback::callback))
             // use guard here to require all requests to results are GET
-            .service(a_web::resource("/results")
-                .guard(guard::Get())
-                .to(results::results))
+            .service(
+                a_web::resource("/results")
+                    .guard(guard::Get())
+                    .to(results::results),
+            )
             .default_service(a_web::route().to(p404::p404))
     })
     .bind_openssl(&*env::ADDRESS, builder)?
