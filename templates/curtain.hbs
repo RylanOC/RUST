@@ -54,14 +54,23 @@
                 onclick="timeSelection(id)">LONG TERM</button>
         </div>
 
-        <ol>
+        <table>
+            <tr>
+                <th>Artist Name</th>
+                <th>Artist Popularity</th>
+                <th>Genres</th>
+            </tr>
             <!--TODO: syle table-->
             {{#each artist_list}}
-            <li>{{this.name}}</li>
+            <tr>
+                <td>{{this.name}}</td>
+                <td>{{this.popularity}}</td>
+                <td>{{this.genres}}</td>
+            </tr>
             {{else}}
             {{/each}}
 
-        </ol>
+        </table>
         <!-- all the needed javascript is in index.js -->
         <script src="static/index.js"> </script>
     </div>
