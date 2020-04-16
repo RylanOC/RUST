@@ -122,13 +122,13 @@ p {
     margin: 50px;
 }
 
-/*  curtain-logo holds the logo of the page
+/*  logo holds the logo of the page
     the png image    */   
-.curtain-logo {
+.logo {
     flex: 60%;
     font-family: source_code_bold;
     font-size: 40px;
-    margin: 0px;
+    margin: 0;
 }
 
 
@@ -216,9 +216,6 @@ p {
     margin: 50px;
 }
 
-
-
-
 /*how to center things*/
 .center {
   display: block;
@@ -237,7 +234,8 @@ p {
 /* Icon sizing and alignment for simple style templates */
 .redirect-icon,
 .p404-icon,
-.curtain-icon {
+.curtain-icon,
+.results-icon {
     max-width: 60%;
     height: auto;
 }

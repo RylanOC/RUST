@@ -5,27 +5,15 @@
     <title>{{page_title}}</title>
     <meta charset="UTF-8">
     <link rel="stylesheet"  type="text/css" href="static/stylesheet.css">
+    <!-- all the needed javascript is in index.js -->
+    <script src="static/index.js"> </script>
 </head>
 
 <body>
 <div class="curtain">
-    <!--
-        <div class="curtain-title">
-            {{title}}
-        </div>
-        -->
-    <div class="curtain-logo">
-        <img src="static/new_logo_music_note.png" width=60% height=50% class=left>
+    <div class="logo">
+        <img src="static/new_logo_music_note.png" class="results-icon">
     </div>
-    <div class="curtain-subtitle">
-        <br>
-        {{subtitle}}
-    </div>
-    {{#if login_button}}
-        <div class="btn">
-            <a href="/login" class="login-button">LOGIN TO SPOTIFY</a>
-        </div>
-    {{/if}}
     <div class="curtain-text">
         <br>
         <h3>See what you've been listening to:</h3>
@@ -60,18 +48,15 @@
             <th>Genres</th>
         </tr>
         <!--TODO: syle table-->
-        {{#each artist_list}}
+        {{#each artists.items}}
             <tr>
                 <td>{{this.name}}</td>
                 <td>{{this.popularity}}</td>
                 <td>{{this.genres}}</td>
             </tr>
-        {{else}}
         {{/each}}
 
     </table>
-    <!-- all the needed javascript is in index.js -->
-    <script src="static/index.js"> </script>
 </div>
 </body>
 
