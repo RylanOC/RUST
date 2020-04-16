@@ -43,12 +43,6 @@ impl Curtain {
         self
     }
 
-    /// Builder pattern function to set the artist list in this curtain.
-    pub fn artist_list(mut self, list: Vec<Artist>) -> Self {
-        self.artist_list = list;
-        self
-    }
-
     /// Render a curtain to a webpage.
     pub fn render(&self, registry: &Handlebars) -> Result<String, RenderError> {
         registry.render("curtain", self)

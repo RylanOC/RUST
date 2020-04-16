@@ -25,7 +25,7 @@ pub async fn login(req: HttpRequest) -> HttpResponse {
     match *req.method() {
         Method::GET => {
             let mut oauth = SpotifyOAuth::default()
-                .redirect_uri(&*env::ADRESS)
+                .redirect_uri(auth::get_callback().as_str())
                 .scope("user-top-read")
                 .client_id(&*env::CLIENT_ID)
                 .client_secret(&*env::CLIENT_SECRET)
