@@ -36,3 +36,5 @@ rand = "0.7.3"
 regex = "1.3.6"
 # Lazily evaluated statics
 lazy_static = "1.4.0"
+# Spotify API Model
+rspotify = "0.9.0"

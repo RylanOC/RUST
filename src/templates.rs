@@ -1,4 +1,3 @@
-use crate::model::Artist;
 use handlebars::{Handlebars, RenderError};
 
 /// Curtain page template structure.
@@ -12,8 +11,6 @@ pub struct Curtain {
     pub subtitle: String,
     /// Is there a login button?
     pub login_button: String,
-    // List of recently listened to artists
-    pub artist_list: Vec<Artist>,
 }
 
 impl Curtain {

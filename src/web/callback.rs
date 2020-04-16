@@ -1,8 +1,7 @@
 use crate::app::AppState;
 use crate::auth::token_request::TokenRequest;
 use crate::auth::token_response::TokenResponse;
-use crate::model;
-use crate::model::{Artist, Items, Track};
+
 use crate::spotify::PersonalizationData;
 use crate::templates::Curtain;
 use actix_web::client::Client;

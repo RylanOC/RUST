@@ -4,6 +4,9 @@ use rand::seq::IteratorRandom;
 use std::str::FromStr;
 use crate::auth;
 use crate::env;
+use rspotify::oauth2::{SpotifyOAuth, SpotifyClientCredentials};
+use rspotify::util::get_token;
+use std::process::exit;
 
 /// Generates a random string of length `l`, of any capital letters, lowercase letters,
 /// and numbers.
@@ -21,32 +24,25 @@ pub async fn generate_random_string(l: usize) -> String {
 pub async fn login(req: HttpRequest) -> HttpResponse {
     match *req.method() {
         Method::GET => {
-            let state: String = generate_random_string(16).await;
-            let scope = "user-top-read";
+            let mut oauth = SpotifyOAuth::default()
+                .redirect_uri(&*env::ADRESS)
+                .scope("user-top-read")
+                .client_id(&*env::CLIENT_ID)
+                .client_secret(&*env::CLIENT_SECRET)
+                .build();
 
-            let path_and_query_str = format!(
-                "/authorize?client_id={}&response_type=code&redirect_uri={}&scope={}&state={}",
-                *env::CLIENT_ID,
-                auth::get_callback(),
-                scope,
-                state
-            );
+            let token = get_token(&mut oauth)
+                .await
+                .unwrap_or_else(|| {
+                    error!(target: "RUST::login", "Authentication Failed. Could not retrive token");
+                    exit(1);
+                });
 
-            let path_and_query = PathAndQuery::from_str(path_and_query_str.as_str()).unwrap();
+            let client_credentials = SpotifyClientCredentials::default()
+                .token_info(token)
+                .build();
 
-            let uri = Uri::builder()
-                .scheme("https")
-                .authority("accounts.spotify.com")
-                .path_and_query(path_and_query)
-                .build()
-                .unwrap();
-
-            println!("callback uri: {}", path_and_query_str);
-            //trace!("Callback uri: {}", uri);
-
-            HttpResponse::PermanentRedirect()
-                .header(header::LOCATION, uri.to_string())
-                .finish()
+            HttpResponse::Ok().finish()
         }
         _ => HttpResponse::MethodNotAllowed().finish(),
     }

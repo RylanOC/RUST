@@ -5,7 +5,6 @@ mod env;
 mod spotify;
 mod templates;
 mod auth;
-mod model;
 mod web;
 
 #[macro_use]
@@ -63,7 +62,6 @@ async fn main() -> io::Result<()> {
             .service(a_web::resource("/callback").to(callback::callback))
             .default_service(a_web::route().to(|| HttpResponse::NotFound()))
     })
-
     .bind_openssl(&*env::ADDRESS, builder)?
     .run()
     .await
