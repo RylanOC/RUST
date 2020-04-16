@@ -17,7 +17,7 @@ pub struct TokenResponse {
     pub scope: Option<String>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Tokens {
     pub access_token: String,
     pub refresh_token: String,
