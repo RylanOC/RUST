@@ -1,9 +1,9 @@
-use actix_web::{HttpRequest, HttpResponse};
-use actix_web::http::{header, Method, PathAndQuery, Uri};
-use rand::seq::IteratorRandom;
-use std::str::FromStr;
 use crate::auth;
 use crate::env;
+use actix_web::http::{header, Method, PathAndQuery, Uri};
+use actix_web::{HttpRequest, HttpResponse};
+use rand::seq::IteratorRandom;
+use std::str::FromStr;
 
 /// Generates a random string of length `l`, of any capital letters, lowercase letters,
 /// and numbers.

@@ -1,8 +1,8 @@
-use actix_web::{HttpRequest, HttpResponse};
-use actix_web::web::Data;
 use crate::app::AppState;
-use actix_web::http::Method;
 use crate::templates::Curtain;
+use actix_web::http::Method;
+use actix_web::web::Data;
+use actix_web::{HttpRequest, HttpResponse};
 
 /// Check if the website is up. Responds with 200 - OK to all GET requests.
 pub async fn is_up(req: HttpRequest, app_data: Data<AppState>) -> HttpResponse {

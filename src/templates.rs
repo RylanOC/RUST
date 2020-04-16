@@ -1,5 +1,5 @@
-use crate::model::Artist;
 use handlebars::{Handlebars, RenderError};
+use rspotify::model::artist::FullArtists;
 
 /// Curtain page template structure.
 #[derive(Clone, Serialize, Deserialize, Default, Debug)]
@@ -13,7 +13,7 @@ pub struct Curtain {
     /// Is there a login button?
     pub login_button: String,
     // List of recently listened to artists
-    pub artist_list: Vec<Artist>,
+    pub artist_list: FullArtists,
 }
 
 impl Curtain {

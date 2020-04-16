@@ -36,3 +36,8 @@ rand = "0.7.3"
 regex = "1.3.6"
 # Lazily evaluated statics
 lazy_static = "1.4.0"
+# Spotify API structure
+# Only using the 'model' and 'senum' modules -- Don't use anything else.
+# These models should accurately represent spotify's data model, and they
+# all have serialization and deserialization already.
+rspotify = "0.9.0"

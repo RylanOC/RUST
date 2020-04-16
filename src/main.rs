@@ -1,11 +1,12 @@
 #![warn(missing_copy_implementations)]
 
+// removed model in favor of rspotify's model.
+
 mod app;
+mod auth;
 mod env;
 mod spotify;
 mod templates;
-mod auth;
-mod model;
 mod web;
 
 #[macro_use]
@@ -47,7 +48,6 @@ async fn main() -> io::Result<()> {
     h.set_strict_mode(true);
     h.register_templates_directory(".hbs", "templates").unwrap();
     let data = AppState::new(Arc::new(h));
-    //let handlebars_ref = a_web::Data::new(h);
     info!("Handlebars templates registered.");
 
     HttpServer::new(move || {
@@ -57,13 +57,12 @@ async fn main() -> io::Result<()> {
             .data(data.clone())
             //.data(handlebars_ref.clone())
             .service(afs::Files::new("static/", "static/"))
-            .service(a_web::resource("/is_up").to(  is_up::is_up))
+            .service(a_web::resource("/is_up").to(is_up::is_up))
             .service(a_web::resource("/").to(index::index))
             .service(a_web::resource("/login").to(login::login))
             .service(a_web::resource("/callback").to(callback::callback))
             .default_service(a_web::route().to(|| HttpResponse::NotFound()))
     })
-
     .bind_openssl(&*env::ADDRESS, builder)?
     .run()
     .await
