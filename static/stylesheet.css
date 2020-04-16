@@ -239,4 +239,10 @@ p {
     max-width: 60%;
     height: auto;
 }
+
+.inline-svg {
+    max-width: 400px;
+    max-height: auto;
+}
+
          
