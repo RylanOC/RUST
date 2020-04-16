@@ -7,10 +7,10 @@ use actix_web::client::Client;
 use actix_web::http::{header, Method, Uri};
 use actix_web::web::Data;
 use actix_web::{HttpRequest, HttpResponse};
-use rspotify::model::artist::FullArtists;
 use serde_json::{from_str, Result, Value};
 use std::process::exit;
 use std::str::FromStr;
+use crate::model::artists::ArtistsVec;
 
 /// Resource GET by spotify login response
 pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpResponse {
@@ -31,6 +31,7 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpRespons
                 exit(1);
             }
             let tokens = response.unwrap();
+
             let artists = PersonalizationData::Artists
                 .make_req(&tokens)
                 .send()
@@ -40,7 +41,7 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpRespons
                     exit(1);
                 })
                 .unwrap()
-                .json::<FullArtists>()
+                .json::<ArtistsVec>()
                 .await
                 .unwrap();
 

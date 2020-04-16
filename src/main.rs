@@ -5,6 +5,7 @@
 mod app;
 mod auth;
 mod env;
+mod model;
 mod spotify;
 mod templates;
 mod web;
@@ -55,7 +56,6 @@ async fn main() -> io::Result<()> {
             .wrap(middleware::Logger::default())
             // logger should always be last middleware added.
             .data(data.clone())
-            //.data(handlebars_ref.clone())
             .service(afs::Files::new("static/", "static/"))
             .service(a_web::resource("/is_up").to(is_up::is_up))
             .service(a_web::resource("/").to(index::index))
