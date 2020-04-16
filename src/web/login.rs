@@ -30,11 +30,12 @@ pub async fn login(req: HttpRequest) -> HttpResponse {
                 .client_id(&*env::CLIENT_ID)
                 .client_secret(&*env::CLIENT_SECRET)
                 .build();
+            println!("{:?}", oauth);
 
             let token = get_token(&mut oauth)
                 .await
                 .unwrap_or_else(|| {
-                    error!(target: "RUST::login", "Authentication Failed. Could not retrive token");
+                    error!(target: "RUST::login", "Authentication Failed. Could not retrieve token");
                     exit(1);
                 });
 
