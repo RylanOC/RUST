@@ -234,4 +234,11 @@ p {
   /*max-width: 50vw;*/
 }
 
+/* Icon sizing and alignment for simple style templates */
+.redirect-icon,
+.p404-icon,
+.curtain-icon {
+    max-width: 60%;
+    height: auto;
+}
          

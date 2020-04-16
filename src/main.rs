@@ -22,7 +22,7 @@ extern crate lazy_static;
 use std::io;
 
 use actix_files as afs;
-use actix_web::{middleware, web as a_web, App, HttpResponse, HttpServer};
+use actix_web::{middleware, web as a_web, App, HttpServer};
 
 use handlebars::Handlebars;
 
@@ -68,7 +68,7 @@ async fn main() -> io::Result<()> {
             .service(a_web::resource("/").to(index::index))
             .service(a_web::resource("/login").to(login::login))
             .service(a_web::resource("/callback").to(callback::callback))
-            .default_service(a_web::route().to(|| HttpResponse::NotFound()))
+            .default_service(a_web::route().to(p404::p404))
     })
     .bind_openssl(&*env::ADDRESS, builder)?
     .run()
