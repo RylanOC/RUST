@@ -41,8 +41,6 @@ pub async fn login(req: HttpRequest) -> HttpResponse {
                 .build()
                 .unwrap();
 
-            println!("callback uri: {}", path_and_query_str);
-            //trace!("Callback uri: {}", uri);
 
             HttpResponse::PermanentRedirect()
                 .header(header::LOCATION, uri.to_string())

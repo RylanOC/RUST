@@ -1,5 +1,6 @@
 //! Token response type. Inspired by
 //! [spotifytops](https://github.com/lperson/spotifytops/blob/main/src/lib/spotify/auth/token_response.rs).
+
 #[derive(Deserialize, Debug, Clone)]
 pub struct AuthenticationError {
     pub error: String,

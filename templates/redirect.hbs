@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <title>{{page_title}}</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="static/stylesheet.css" media="screen">
+    <!--    <link rel="stylesheet" type="text/css" href="static/stylesheet.css">-->
+</head>
+
+<body>
+<div class="curtain">
+    <div class="curtain-title">
+        {{title}}
+    </div>
+    <div class="curtain-logo">
+        <img src="static/new_logo_music_note.png" width=60% height=50% class=left>
+    </div>
+    <div class="curtain-subtitle">
+        <br>
+        {{subtitle}}
+    </div>
+    {{#if login_button}}
+        <div class="btn">
+            <a href="/login" class="login-button">LOGIN TO SPOTIFY</a>
+        </div>
+    {{/if}}
+</div>
+</body>
+
+</html>
