@@ -4,6 +4,9 @@ use actix_web::http::{header, Method, PathAndQuery, Uri};
 use actix_web::{HttpRequest, HttpResponse};
 use rand::seq::IteratorRandom;
 use std::str::FromStr;
+use crate::templates::Redirect;
+use actix_web::web::Data;
+use crate::app::AppState;
 
 /// Generates a random string of length `l`, of any capital letters, lowercase letters,
 /// and numbers.
@@ -18,7 +21,7 @@ pub async fn generate_random_string(l: usize) -> String {
 }
 
 /// Login should reroute to Spotify
-pub async fn login(req: HttpRequest) -> HttpResponse {
+pub async fn login(req: HttpRequest, app_data: Data<AppState>) -> HttpResponse {
     match *req.method() {
         Method::GET => {
             let state: String = generate_random_string(16).await;
@@ -39,12 +42,17 @@ pub async fn login(req: HttpRequest) -> HttpResponse {
                 .authority("accounts.spotify.com")
                 .path_and_query(path_and_query)
                 .build()
+                .unwrap()
+                .to_string();
+
+            let hbs_reg = &app_data.template_registry;
+            let page = Redirect::new(&uri)
+                .render(hbs_reg)
                 .unwrap();
 
-
             HttpResponse::PermanentRedirect()
-                .header(header::LOCATION, uri.to_string())
-                .finish()
+                .header(header::LOCATION, uri)
+                .body(page)
         }
         _ => HttpResponse::MethodNotAllowed().finish(),
     }

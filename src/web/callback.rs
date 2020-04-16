@@ -1,13 +1,13 @@
 use crate::app::AppState;
 use crate::auth::token_request::TokenRequest;
-use crate::spotify::PersonalizationData;
-use crate::templates::Curtain;
+use crate::templates::{Redirect};
 use actix_web::http::Method;
 use actix_web::web::Data;
 use actix_web::{HttpRequest, HttpResponse};
 use std::process::exit;
-use crate::model::artists::ArtistsVec;
 use actix_session::Session;
+use actix_web::http::header;
+use crate::env;
 
 /// Resource GET by spotify login response
 pub async fn callback(req: HttpRequest, app_data: Data<AppState>, session: Session) -> HttpResponse {
@@ -31,13 +31,14 @@ pub async fn callback(req: HttpRequest, app_data: Data<AppState>, session: Sessi
             // store the Spotify token in a cookie.
             session.set("tokens", tokens).unwrap();
 
+            let results_page = format!("https://{}/results", &*env::ADDRESS);
             let hbs_reg = &app_data.template_registry;
-            let page = Curtain::new()
-                .page_title("RUST")
-                .title("Artist List")
+            let page = Redirect::new(&results_page)
                 .render(hbs_reg)
                 .unwrap();
-            HttpResponse::Ok().body(page)
+            HttpResponse::PermanentRedirect()
+                .header(header::LOCATION, results_page)
+                .body(page)
         }
         _ => HttpResponse::MethodNotAllowed().finish(),
     }

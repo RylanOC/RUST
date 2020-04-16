@@ -43,7 +43,7 @@ impl<'a> TokenRequest<'a> {
             .send_body(serialized_token_req)
             .await
             .map_err(|e| {
-                error!(target: "RUST: TokenRequest::make_request", "Error getting tokens: {:?}", e);
+                error!("Error getting tokens: {:?}", e);
                 exit(1);
             })
             .unwrap()
