@@ -1,11 +1,12 @@
 #![warn(missing_copy_implementations)]
+#![allow(dead_code)]
 
 mod app;
+mod auth;
 mod env;
+mod model;
 mod spotify;
 mod templates;
-mod auth;
-mod model;
 mod web;
 
 #[macro_use]
@@ -20,7 +21,7 @@ extern crate lazy_static;
 use std::io;
 
 use actix_files as afs;
-use actix_web::{middleware, web as a_web, App, HttpResponse, HttpServer};
+use actix_web::{middleware, web as a_web, App, HttpServer};
 
 use handlebars::Handlebars;
 
@@ -28,7 +29,11 @@ use crate::app::AppState;
 use crate::web::*;
 use std::sync::Arc;
 
+use actix_session::CookieSession;
+use actix_web::guard;
 use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
+use rand::rngs::OsRng;
+use rand::RngCore;
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
@@ -47,23 +52,30 @@ async fn main() -> io::Result<()> {
     h.set_strict_mode(true);
     h.register_templates_directory(".hbs", "templates").unwrap();
     let data = AppState::new(Arc::new(h));
-    //let handlebars_ref = a_web::Data::new(h);
     info!("Handlebars templates registered.");
+
+    let mut cookie_session_key = [0u8; 32];
+    OsRng::default().fill_bytes(&mut cookie_session_key);
 
     HttpServer::new(move || {
         App::new()
+            .wrap(CookieSession::private(&cookie_session_key).secure(true))
             .wrap(middleware::Logger::default())
             // logger should always be last middleware added.
             .data(data.clone())
-            //.data(handlebars_ref.clone())
             .service(afs::Files::new("static/", "static/"))
-            .service(a_web::resource("/is_up").to(  is_up::is_up))
+            .service(a_web::resource("/is_up").to(is_up::is_up))
             .service(a_web::resource("/").to(index::index))
             .service(a_web::resource("/login").to(login::login))
             .service(a_web::resource("/callback").to(callback::callback))
-            .default_service(a_web::route().to(|| HttpResponse::NotFound()))
+            // use guard here to require all requests to results are GET
+            .service(
+                a_web::resource("/results")
+                    .guard(guard::Get())
+                    .to(results::results),
+            )
+            .default_service(a_web::route().to(p404::p404))
     })
-
     .bind_openssl(&*env::ADDRESS, builder)?
     .run()
     .await

@@ -1,5 +1,4 @@
 use crate::app::AppState;
-use crate::model::{Artist, Items};
 use crate::templates::Curtain;
 use actix_web::http::Method;
 use actix_web::web::Data;
