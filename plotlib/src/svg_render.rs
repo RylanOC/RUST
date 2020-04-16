@@ -179,9 +179,10 @@ pub fn draw_categorical_x_axis(a: &axis::CategoricalAxis, face_width: f64) -> no
 
     let label = node::element::Text::new()
         .set("x", face_width / 2.)
-        .set("y", 30)
+        .set("y", 40)
         .set("text-anchor", "middle")
-        .set("font-size", 12)
+        .set("font-size", 14)
+        .set("font-weight", "bold")
         .set("fill", "#cfe8fa")
         .add(node::Text::new(a.get_label()));
 
