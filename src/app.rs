@@ -1,5 +1,5 @@
 use handlebars::Handlebars;
-use std::sync::{Arc, Mutex};
+use std::sync::{Arc};
 
 #[derive(Debug, Clone)]
 pub struct AppState {

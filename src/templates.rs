@@ -1,5 +1,4 @@
 use handlebars::{Handlebars, RenderError};
-use rspotify::model::artist::FullArtists;
 
 /// Curtain page template structure.
 #[derive(Clone, Serialize, Deserialize, Default, Debug)]

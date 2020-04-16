@@ -31,6 +31,9 @@ use crate::web::*;
 use std::sync::Arc;
 
 use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
+use actix_session::CookieSession;
+use rand::rngs::OsRng;
+use rand::RngCore;
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
@@ -51,8 +54,12 @@ async fn main() -> io::Result<()> {
     let data = AppState::new(Arc::new(h));
     info!("Handlebars templates registered.");
 
+    let mut cookie_session_key = [0u8; 32];
+    OsRng::default().fill_bytes(&mut cookie_session_key);
+
     HttpServer::new(move || {
         App::new()
+            .wrap(CookieSession::private(&cookie_session_key).secure(true))
             .wrap(middleware::Logger::default())
             // logger should always be last middleware added.
             .data(data.clone())

@@ -1,20 +1,16 @@
 use crate::app::AppState;
 use crate::auth::token_request::TokenRequest;
-use crate::auth::token_response::TokenResponse;
 use crate::spotify::PersonalizationData;
 use crate::templates::Curtain;
-use actix_web::client::Client;
-use actix_web::http::{header, Method, Uri};
+use actix_web::http::Method;
 use actix_web::web::Data;
 use actix_web::{HttpRequest, HttpResponse};
-use serde_json::{from_str, Result, Value};
 use std::process::exit;
-use std::str::FromStr;
 use crate::model::artists::ArtistsVec;
+use actix_session::Session;
 
 /// Resource GET by spotify login response
-pub async fn callback(req: HttpRequest, app_data: Data<AppState>) -> HttpResponse {
-    //let hbs_reg = &app_data.template_registry;
+pub async fn callback(req: HttpRequest, app_data: Data<AppState>, session: Session) -> HttpResponse {
     match *req.method() {
         Method::GET => {
             let code = req
