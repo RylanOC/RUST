@@ -23,7 +23,7 @@ impl BarchartDatum {
     }
 }
 
-pub fn make_barchart(data: Vec<BarchartDatum>, col: Vec<&str>, label: &str, filename: &str, ) {
+pub fn make_barchart(data: Vec<BarchartDatum>, col: Vec<&str>, label: &str, filename: &str, ) -> Result<String> {
 
     let mut colors: VecDeque<&str> = VecDeque::from_iter(col);
     let mut v = CategoricalView::new().x_label(label.to_string());
@@ -39,7 +39,8 @@ pub fn make_barchart(data: Vec<BarchartDatum>, col: Vec<&str>, label: &str, file
 
     
 
-    Page::single(&v).save(filename.to_string()).expect("saving svg");
+    //Page::single(&v).save(filename.to_string()).expect("saving svg");
+    Page::single(&v).to_svg()
 }
 
 // fn main() {
