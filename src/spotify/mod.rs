@@ -7,7 +7,50 @@ use serde::de::DeserializeOwned;
 pub mod params;
 pub use params::*;
 
-const SPOTIFY_ENDPOINT: &'static str = "https://api.spotify.com/v1/me/top/";
+const PERSONALIZATION_ENDPOINT: &'static str = "https://api.spotify.com/v1/me/top/";
+const AUDIO_FEATURES_ENDPOINT: &'static str = "https://api.spotify.com/v1/audio-features/";
+
+
+pub struct TrackData {
+    track_id: String
+}
+
+impl TrackData {
+    pub fn new(id: &str) -> TrackData {
+        TrackData {
+            track_id: id.to_string()
+        }
+    }
+
+    fn get_endpoint(self) -> Uri {
+        format!("{}{}", AUDIO_FEATURES_ENDPOINT, self.track_id)
+            .parse()
+            .unwrap()
+    }
+
+    pub fn make_req(self, tokens: &Tokens) -> ClientRequest {
+        let client = Client::default();
+        client
+            .get(self.get_endpoint())
+            .bearer_auth(&tokens.access_token)
+            .query(&PersonalizationParams::new())
+            .unwrap()
+    }
+
+    /// Get a spotify data as deserialized json.
+    pub async fn get_data<T: DeserializeOwned>(
+        self,
+        tokens: &Tokens,
+    ) -> Result<T, String> {
+        self.make_req(tokens)
+            .send()
+            .await
+            .map_err(|err| err.to_string())?
+            .json::<T>()
+            .await
+            .map_err(|e| e.to_string())
+    }
+}
 
 #[derive(Copy, Clone, Debug, Hash, Eq, PartialEq)]
 pub enum PersonalizationData {
@@ -26,7 +69,7 @@ impl PersonalizationData {
 
     /// Get the endpoint of Spotify's API.
     pub fn get_endpoint(self) -> Uri {
-        format!("{}{}", SPOTIFY_ENDPOINT, self.get_endpoint_path())
+        format!("{}{}", PERSONALIZATION_ENDPOINT, self.get_endpoint_path())
             .parse()
             .unwrap()
     }
