@@ -23,6 +23,9 @@ impl BarchartDatum {
     }
 }
 
+//     let colors: [&str, 7] = ["white","#1DB954","hotpink","yellow","cornflowerblue","crimson","mediumorchid"];
+
+
 pub fn make_barchart(data: Vec<BarchartDatum>, col: Vec<&str>, label: &str) -> std::string::String {
 
     let mut colors: VecDeque<&str> = VecDeque::from_iter(col);
@@ -37,22 +40,15 @@ pub fn make_barchart(data: Vec<BarchartDatum>, col: Vec<&str>, label: &str) -> s
         colors.push_back(curr_color);
     }
 
-    
-
-    //Page::single(&v).save(filename.to_string()).expect("saving svg");
     Page::single(&v).to_svg().unwrap().to_string()
 }
 
-// fn main() {
-//     let colors: [&str, 7] = ["white","#1DB954","hotpink","yellow","cornflowerblue","crimson","mediumorchid"];
 
-// }
-
-pub fn make_histogram(data: Vec<f64>, label: &str, filename: &str) {
+pub fn make_histogram(data: Vec<f64>, label: &str, color: &str) -> std::string::String {
     let h = Histogram::from_slice(&data, HistogramBins::Count(10))
-        .style(&BoxStyle::new().fill("#cfe8fa"));
+        .style(&BoxStyle::new().fill(color.to_string()));
 
     let v = ContinuousView::new().add(h).x_label(label);
 
-    Page::single(&v).save(filename).expect("saving svg");
+    Page::single(&v).to_svg().unwrap().to_string()
 }
