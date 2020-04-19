@@ -110,7 +110,7 @@ impl<'a> ChartBuilder<'a> {
             charts.push(chart_maker::make_barchart(genre_vec[..10].to_vec(), &col, "Artist Genres").to_string());
         }
         else {
-            charts.push(chart_maker::make_barchart(genre_vec, &col, "Artist Genres").to_string());
+            charts.push(chart_maker::make_barchart(genre_vec, &col, "Top 10 Genres").to_string());
         }
 
         return charts;
