@@ -7,3 +7,9 @@ pub struct TracksVec {
     pub paging_info: PagingObject,
     pub items: Vec<FullTrack>,
 }
+
+impl TracksVec {
+    pub fn combine(&mut self, other: &mut TracksVec) {
+        self.items.append(&mut other.items);
+    }
+}
