@@ -21,3 +21,5 @@ RUST_ENV.bash
 genreTest.svg
 
 numTest.svg
+
+.vscode/launch.json

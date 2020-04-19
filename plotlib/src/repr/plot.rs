@@ -179,7 +179,7 @@ impl ContinuousRepresentation for Plot {
         face_width: u32,
         face_height: u32,
     ) -> String {
-        let face_lines = if let Some(line_style) = &self.line_style {
+        let face_lines = if let Some(_line_style) = &self.line_style {
             unimplemented!("Text rendering does not yet support line plots")
         } else {
             text_render::empty_face(face_width, face_height)
