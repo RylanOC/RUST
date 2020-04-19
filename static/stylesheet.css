@@ -245,4 +245,11 @@ p {
     max-height: auto;
 }
 
+.chart-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    grid-auto-rows: minmax(100px, auto);
+
+}
          
