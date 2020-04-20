@@ -107,7 +107,7 @@ impl<'a> ChartBuilder<'a> {
         genre_vec.sort_by(|a, b| b.value.partial_cmp(&a.value).unwrap());
 
         if genre_vec.len()>10 {
-            charts.push(chart_maker::make_barchart(genre_vec[..10].to_vec(), &col, "Artist Genres").to_string());
+            charts.push(chart_maker::make_barchart(genre_vec[..10].to_vec(), &col, "Top 10 Genres").to_string());
         }
         else {
             charts.push(chart_maker::make_barchart(genre_vec, &col, "Top 10 Genres").to_string());
