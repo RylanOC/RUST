@@ -38,7 +38,6 @@ impl ImageView {
     }
 }
 
-
 /// Curtain page template structure.
 #[derive(Clone, Serialize, Deserialize, Default, Debug)]
 pub struct Curtain {

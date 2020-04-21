@@ -3,12 +3,12 @@
 
 mod app;
 mod auth;
+mod chart_maker;
 mod env;
 mod model;
 mod spotify;
 mod templates;
 mod web;
-mod chart_maker;
 
 #[macro_use]
 extern crate log;
@@ -82,4 +82,3 @@ async fn main() -> io::Result<()> {
     .run()
     .await
 }
-

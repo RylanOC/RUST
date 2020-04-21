@@ -1,14 +1,13 @@
-
+use crate::chart_maker;
 use crate::model::artists::ArtistsVec;
 use crate::model::tracks::TracksVec;
-use crate::chart_maker;
 
 use rspotify::client::Spotify;
-use rspotify::oauth2::SpotifyClientCredentials;
 use rspotify::model::audio::AudioFeatures;
+use rspotify::oauth2::SpotifyClientCredentials;
 
-use std::collections::VecDeque;
 use std::collections::HashMap;
+use std::collections::VecDeque;
 use std::iter::FromIterator;
 
 pub struct ChartBuilder<'a> {
@@ -22,9 +21,15 @@ impl<'a> ChartBuilder<'a> {
         ChartBuilder {
             artists: a,
             tracks: t,
-            colors: VecDeque::from_iter(
-                vec!["white","#1DB954","hotpink","yellow","cornflowerblue","crimson","mediumorchid"]
-            ),
+            colors: VecDeque::from_iter(vec![
+                "white",
+                "#1DB954",
+                "hotpink",
+                "yellow",
+                "cornflowerblue",
+                "crimson",
+                "mediumorchid",
+            ]),
         }
     }
 
@@ -33,9 +38,8 @@ impl<'a> ChartBuilder<'a> {
     }
 
     pub async fn get_charts(&self) -> Vec<std::string::String> {
-
         let mut charts: Vec<std::string::String> = Vec::new();
-        
+
         let mut col = self.colors.clone();
 
         let mut artist_pop: Vec<f64> = Vec::new();
@@ -43,12 +47,17 @@ impl<'a> ChartBuilder<'a> {
         for artist in &(self.artists.items) {
             artist_pop.push(artist.popularity as f64);
             for genre in &artist.genres {
-                genre_map.entry(genre.to_string())
+                genre_map
+                    .entry(genre.to_string())
                     .or_insert(chart_maker::BarchartDatum::new(genre, 0.0).clone())
                     .value += 1.0;
             }
         }
-        charts.push(chart_maker::make_histogram(artist_pop, "Artist Popularity", col.front().unwrap()));
+        charts.push(chart_maker::make_histogram(
+            artist_pop,
+            "Artist Popularity",
+            col.front().unwrap(),
+        ));
 
         let temp = col.pop_front().unwrap();
         col.push_back(temp);
@@ -59,15 +68,16 @@ impl<'a> ChartBuilder<'a> {
             .client_credentials_manager(client_credential)
             .build();
         let mut track_ids: Vec<String> = Vec::new();
-        
+
         for track in &(self.tracks.items) {
             track_ids.push(track.id.as_ref().unwrap().to_string());
         }
-        let track_info: Vec<AudioFeatures> = spotify.audios_features(&track_ids)
-                                                    .await
-                                                    .unwrap()
-                                                    .unwrap()
-                                                    .audio_features;
+        let track_info: Vec<AudioFeatures> = spotify
+            .audios_features(&track_ids)
+            .await
+            .unwrap()
+            .unwrap()
+            .audio_features;
 
         let mut acousticness: Vec<f64> = Vec::new();
         let mut danceability: Vec<f64> = Vec::new();
@@ -83,38 +93,57 @@ impl<'a> ChartBuilder<'a> {
             mood.push(info.valence as f64);
         }
 
-        charts.push(chart_maker::make_histogram(acousticness, "Acousticness", col.front().unwrap()));
+        charts.push(chart_maker::make_histogram(
+            acousticness,
+            "Acousticness",
+            col.front().unwrap(),
+        ));
         let temp = col.pop_front().unwrap();
         col.push_back(temp);
 
-        charts.push(chart_maker::make_histogram(danceability, "Danceability", col.front().unwrap()));
+        charts.push(chart_maker::make_histogram(
+            danceability,
+            "Danceability",
+            col.front().unwrap(),
+        ));
         let temp = col.pop_front().unwrap();
         col.push_back(temp);
 
-        charts.push(chart_maker::make_histogram(energy, "Energy", col.front().unwrap()));
+        charts.push(chart_maker::make_histogram(
+            energy,
+            "Energy",
+            col.front().unwrap(),
+        ));
         let temp = col.pop_front().unwrap();
         col.push_back(temp);
 
-        charts.push(chart_maker::make_histogram(tempo, "Tempo", col.front().unwrap()));
+        charts.push(chart_maker::make_histogram(
+            tempo,
+            "Tempo",
+            col.front().unwrap(),
+        ));
         let temp = col.pop_front().unwrap();
         col.push_back(temp);
 
-        charts.push(chart_maker::make_histogram(mood, "Sad <-- Mood --> Happy", col.front().unwrap()));
+        charts.push(chart_maker::make_histogram(
+            mood,
+            "Sad <-- Mood --> Happy",
+            col.front().unwrap(),
+        ));
 
-        let mut genre_vec: Vec<&chart_maker::BarchartDatum> = 
-            genre_map.values().clone().collect();
-        
+        let mut genre_vec: Vec<&chart_maker::BarchartDatum> = genre_map.values().clone().collect();
+
         genre_vec.sort_by(|a, b| b.value.partial_cmp(&a.value).unwrap());
 
-        if genre_vec.len()>10 {
-            charts.push(chart_maker::make_barchart(genre_vec[..10].to_vec(), &col, "Top 10 Genres").to_string());
-        }
-        else {
+        if genre_vec.len() > 10 {
+            charts.push(
+                chart_maker::make_barchart(genre_vec[..10].to_vec(), &col, "Top 10 Genres")
+                    .to_string(),
+            );
+        } else {
             charts.push(chart_maker::make_barchart(genre_vec, &col, "Top 10 Genres").to_string());
         }
 
         return charts;
     }
-
-
 }

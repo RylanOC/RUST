@@ -4,12 +4,11 @@ use actix_web::http::Uri;
 use serde::de::DeserializeOwned;
 
 // re-export parameter class and timerange
-pub mod params;
 pub mod charts;
+pub mod params;
 pub use params::*;
 
 const PERSONALIZATION_ENDPOINT: &'static str = "https://api.spotify.com/v1/me/top/";
-
 
 #[derive(Copy, Clone, Debug, Hash, Eq, PartialEq)]
 pub enum PersonalizationData {
