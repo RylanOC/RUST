@@ -52,13 +52,15 @@
 
     <table>
         <tr>
+            <th></th>
             <th>Artist Name</th>
             <th>Artist Popularity</th>
             <th>Genres</th>
         </tr>
-        <!--TODO: syle table-->
+        <!--TODO: style table-->
         {{#each artists.items}}
             <tr>
+                <td>{{@index}}.</td>
                 <td>{{this.name}}</td>
                 <td>{{this.popularity}}</td>
                 <td>{{this.genres}}</td>
