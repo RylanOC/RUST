@@ -4,10 +4,11 @@ use actix_web::http::Uri;
 use serde::de::DeserializeOwned;
 
 // re-export parameter class and timerange
+pub mod charts;
 pub mod params;
 pub use params::*;
 
-const SPOTIFY_ENDPOINT: &'static str = "https://api.spotify.com/v1/me/top/";
+const PERSONALIZATION_ENDPOINT: &'static str = "https://api.spotify.com/v1/me/top/";
 
 #[derive(Copy, Clone, Debug, Hash, Eq, PartialEq)]
 pub enum PersonalizationData {
@@ -26,7 +27,7 @@ impl PersonalizationData {
 
     /// Get the endpoint of Spotify's API.
     pub fn get_endpoint(self) -> Uri {
-        format!("{}{}", SPOTIFY_ENDPOINT, self.get_endpoint_path())
+        format!("{}{}", PERSONALIZATION_ENDPOINT, self.get_endpoint_path())
             .parse()
             .unwrap()
     }

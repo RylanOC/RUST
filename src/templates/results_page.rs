@@ -7,15 +7,17 @@ pub struct ResultsPage {
     pub page_title: String,
     pub artists: ArtistsVec,
     pub tracks: TracksVec,
+    pub charts: String,
 }
 
 impl ResultsPage {
     /// Constructs a new ResultsPage, default the page title to results.
-    pub fn new(artist_data: ArtistsVec, track_data: TracksVec) -> Self {
+    pub fn new(artist_data: ArtistsVec, track_data: TracksVec, chart_data: String) -> Self {
         Self {
             page_title: "Results".to_owned(),
             artists: artist_data,
             tracks: track_data,
+            charts: chart_data,
         }
     }
 

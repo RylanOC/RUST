@@ -3,6 +3,7 @@
 
 mod app;
 mod auth;
+mod chart_maker;
 mod env;
 mod model;
 mod spotify;
