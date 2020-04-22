@@ -51,6 +51,8 @@ function musicSelection(button_id) {
     if (button_id == "artist-music-button") {
         document.getElementById("song-music-button").style.background = "#cfe8fa";
         document.getElementById("song-music-button").style.color = "black";
+        document.getElementById("chart-music-button").style.background = "#cfe8fa";
+        document.getElementById("chart-music-button").style.color = "black";
         artist_table.style.display = "block";
         track_table.style.display = "none";
         chart_table.style.display = "none";
@@ -58,13 +60,17 @@ function musicSelection(button_id) {
     if (button_id == "song-music-button") {
         document.getElementById("artist-music-button").style.background = "#cfe8fa";
         document.getElementById("artist-music-button").style.color = "black";
+        document.getElementById("chart-music-button").style.background = "#cfe8fa";
+        document.getElementById("chart-music-button").style.color = "black";
         artist_table.style.display = "none";
         chart_table.style.display = "none";
         track_table.style.display = "block";
     }
     if (button_id == "chart-music-button") {
-        document.getElementById("chart-music-button").style.background = "#cfe8fa";
-        document.getElementById("chart-music-button").style.color = "black";
+        document.getElementById("song-music-button").style.background = "#cfe8fa";
+        document.getElementById("song-music-button").style.color = "black";
+        document.getElementById("artist-music-button").style.background = "#cfe8fa";
+        document.getElementById("artist-music-button").style.color = "black";
         artist_table.style.display = "none";
         track_table.style.display = "none";
         chart_table.style.display = "block";
