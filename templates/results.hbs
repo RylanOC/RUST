@@ -4,82 +4,116 @@
 <head>
     <title>{{page_title}}</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet"  type="text/css" href="static/stylesheet.css"/>
+    <link rel="stylesheet" type="text/css" href="static/stylesheet.css" />
     <!-- all the needed javascript is in index.js -->
     <script src="static/index.js"> </script>
 </head>
 
 <body>
-<!-- needed for fb share button -->
+    <!-- needed for fb share button -->
     <div id="fb-root"></div>
-    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v6.0"></script>
+    <script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v6.0"></script>
     <script src="static/chart_item.js"></script>
-<div class="curtain">
-    <div class="logo">
-        <img src="static/new_logo_music_note.png" class="results-icon">
-    </div>
-    <div class="curtain-text">
-        <br>
-        <h3>See what you've been listening to:</h3>
-    </div>
-    <div class="btn">
-        <button type="button" class="artist music-button" id="artist-music-button"
+    <div class="curtain">
+        <div class="logo">
+            <img src="static/new_logo_music_note.png" class="results-icon">
+        </div>
+        <div class="curtain-text">
+            <br>
+            <h3>See what you've been listening to:</h3>
+        </div>
+        <div class="btn">
+            <button type="button" class="artist music-button" id="artist-music-button"
                 onclick="musicSelection(id)">ARTISTS</button>
-        <button type="button" class="song music-button" id="song-music-button"
+            <button type="button" class="song music-button" id="song-music-button"
                 onclick="musicSelection(id)">SONGS</button>
-        <button type="button" class="album music-button" id="album-music-button"
+            <button type="button" class="album music-button" id="album-music-button"
                 onclick="musicSelection(id)">ALBUMS</button>
-        <button type="button" class="genre music-button" id="genre-music-button"
+            <button type="button" class="genre music-button" id="genre-music-button"
                 onclick="musicSelection(id)">GENRES</button>
-    </div>
-    <div class="curtain-text">
-        <br>
-        <h3>Through what timeline:</h3>
-    </div>
-    <div class="btn">
-        <a href="/results?time=short">
-            <button type="button" class="short-term time-button" id="short-term-time-button"
+        </div>
+        <div class="curtain-text">
+            <br>
+            <h3>Through what timeline:</h3>
+        </div>
+        <div class="btn">
+            <a href="/results?time=short">
+                <button type="button" class="short-term time-button" id="short-term-time-button"
                     onclick="timeSelection(id)">SHORT TERM</button>
-        </a>
-        <a href="/results?time=medium">
-            <button type="button" class="medium-term time-button" id="medium-term-time-button"
+            </a>
+            <a href="/results?time=medium">
+                <button type="button" class="medium-term time-button" id="medium-term-time-button"
                     onclick="timeSelection(id)">MEDIUM TERM</button>
-        </a>
-        <a href="/results?time=long">
-            <button type="button" class="long-term time-button" id="long-term-time-button"
+            </a>
+            <a href="/results?time=long">
+                <button type="button" class="long-term time-button" id="long-term-time-button"
                     onclick="timeSelection(id)">LONG TERM</button>
-        </a>
-    </div>
+            </a>
+        </div>
 
-    <table>
-        <tr>
-            <th></th>
-            <th>Artist Name</th>
-            <th>Artist Popularity</th>
-            <th>Genres</th>
-        </tr>
-        <!--TODO: style table-->
-        {{#each artists.items}}
+        <table id=artists>
+            <tr>
+                <th></th>
+                <th>Artist Name</th>
+                <th>Artist Popularity</th>
+                <th>Genres</th>
+            </tr>
+            <!--TODO: style table-->
+            {{#each artists.items}}
             <tr>
                 <td>{{@index}}.</td>
                 <td>{{this.name}}</td>
                 <td>{{this.popularity}}</td>
                 <td>{{this.genres}}</td>
             </tr>
-        {{/each}}
+            {{/each}}
 
-    </table>
+        </table>
 
-    <!-- sharing to social media buttons -->
-    <div class="curtain-text">
-        <br>
-        <a class="twitter-share-button" href="https://twitter.com/intent/tweet?text=See%20my%20Spotify%20listening%20tops%20in%20this%20sick%20visual%20made%20with%20rustspotify.xyz" data-size="large" data-theme="dark" hashtags="rustspotify" id="twitter-wjs" target="_blank"><img src="static/twitter_logo.png" height=20% width=20% class = left></a>
-        <div class="fb-share-button" data-href="http://rustspotify.xyz" data-layout="button_count" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Frustspotify.xyz%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+        <table id=tracks>
+            <tr>
+                <th></th>
+                <th>Track Name</th>
+                <th>Artist(s)</th>
+                <th>Album</th>
+                <th>Popularity</th>
+            </tr>
+            <!--TODO: style table-->
+            {{#each tracks.items}}
+            <tr>
+                <td>{{@index}}.</td>
+                <td>{{this.name}}</td>
+                <td>
+                    {{#each this.artists}}
+                    {{this.name}}
+                    {{/each}}
+                    ,
+                </td>
+                <td>{{this.album.name}}</td>
+                <td>{{this.popularity}}</td>
+            </tr>
+            {{/each}}
+
+        </table>
+
+
+        <!-- sharing to social media buttons -->
+        <div class="curtain-text">
+            <br>
+            <a class="twitter-share-button"
+                href="https://twitter.com/intent/tweet?text=See%20my%20Spotify%20listening%20tops%20in%20this%20sick%20visual%20made%20with%20rustspotify.xyz"
+                data-size="large" data-theme="dark" hashtags="rustspotify" id="twitter-wjs" target="_blank"><img
+                    src="static/twitter_logo.png" height=20% width=20% class=left></a>
+            <div class="fb-share-button" data-href="http://rustspotify.xyz" data-layout="button_count"
+                data-size="large"><a target="_blank"
+                    href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Frustspotify.xyz%2F&amp;src=sdkpreparse"
+                    class="fb-xfbml-parse-ignore">Share</a></div>
+        </div>
+
+        <!-- Charts -->
+        {{{charts}}}
     </div>
-
-    <!-- Charts -->
-    {{{charts}}}
-</div>
 </body>
 
 </html>
