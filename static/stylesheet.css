@@ -101,7 +101,8 @@ p {
 }
 
 tr:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: #cfe8fa;
+  color: black;
 }
 
 /*  curtain is the class that holds all of 
