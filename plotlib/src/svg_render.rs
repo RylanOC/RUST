@@ -123,12 +123,13 @@ pub fn draw_y_axis(a: &axis::ContinuousAxis, face_height: f64) -> node::element:
 
     let x_offset = -(y_tick_font_size * max_tick_length as i32);
     let y_label_offset = -(face_height / 2.);
-    let y_label_font_size = 12;
+    let y_label_font_size = 14;
     let label = node::element::Text::new()
         .set("x", x_offset)
-        .set("y", y_label_offset - f64::from(y_label_font_size))
+        .set("y", y_label_offset - f64::from(y_label_font_size)-10.0)
         .set("text-anchor", "middle")
         .set("font-size", y_label_font_size)
+        .set("font-weight", "bold")
         .set("fill", "#cfe8fa")
         .set(
             "transform",
