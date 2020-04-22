@@ -84,16 +84,13 @@
             <tr>
                 <td>{{@index}}.</td>
                 <td>{{this.name}}</td>
+                <td>{{this.popularity}}</td>
                 <td>
                     {{#each this.artists}}
-                    {{this.name}}
+                    {{this.name}},
                     {{/each}}
-                    ,
                 </td>
                 <td>{{this.album.name}}</td>
-                <td>{{this.popularity}}</td>
-            </tr>
-            {{/each}}
 
         </table>
 
