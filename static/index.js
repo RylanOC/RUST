@@ -45,7 +45,7 @@ function musicSelection(button_id) {
 
     var artist_table = document.getElementById("artists");
     var track_table = document.getElementById("tracks");
-    var charts_table = document.getElementById("charts");
+    var chart_table = document.getElementById("charts");
 
     /* black out previously clicked buttons */
     if (button_id == "artist-music-button") {
