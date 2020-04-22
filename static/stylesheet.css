@@ -100,8 +100,10 @@ p {
     margin: 0px;
 }
 
+/* stripe table for artist and track views
+*/
 tr:nth-child(even) {
-  background-color: #cfe8fa;
+  background-color: #809eb3;
   color: black;
 }
 
