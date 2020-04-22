@@ -37,6 +37,7 @@ impl PersonalizationData {
         let client = Client::default();
         client
             .get(self.get_endpoint())
+            .timeout(std::time::Duration::new(30, 0))
             .bearer_auth(&tokens.access_token)
             .query(params)
             .unwrap()

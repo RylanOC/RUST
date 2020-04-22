@@ -12,7 +12,6 @@ use actix_web::http::header;
 use actix_web::web::{Data, Query};
 use actix_web::{HttpRequest, HttpResponse};
 use rspotify::senum::TimeRange;
-use std::process::exit;
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct ResultsQuery {
@@ -59,7 +58,7 @@ pub async fn results(
             }
         })
         .unwrap_or(TimeRange::MediumTerm);
-
+    
     let tokens: Tokens = opt.unwrap();
     let artist_params = PersonalizationParams::new()
         .limit(50)
@@ -71,14 +70,14 @@ pub async fn results(
         .unwrap()
         .time_range(time_range);
 
-    let mut tracks: TracksVec = PersonalizationData::Tracks
+    let gateway_timeout = |s: String| HttpResponse::GatewayTimeout().body(s);
+
+    let tracks_result = PersonalizationData::Tracks
         .get_data::<TracksVec>(&tokens, &track_params)
         .await
-        .map_err(|e| {
-            error!("Could not get track data: {}", e);
-            exit(1)
-        })
-        .unwrap();
+        .map_err(gateway_timeout);
+    if tracks_result.is_err() {return tracks_result.unwrap_err()}
+    let mut tracks= tracks_result.unwrap();
 
     for i in 1..6 {
         let track_params = PersonalizationParams::new()
@@ -87,26 +86,22 @@ pub async fn results(
             .unwrap()
             .time_range(time_range);
 
-        tracks.combine(
-            &mut PersonalizationData::Tracks
-                .get_data::<TracksVec>(&tokens, &track_params)
-                .await
-                .map_err(|e| {
-                    error!("Could not get track data: {}", e);
-                    exit(1)
-                })
-                .unwrap(),
-        );
+        let intermediate_result = PersonalizationData::Tracks
+            .get_data::<TracksVec>(&tokens, &track_params)
+            .await
+            .map_err(gateway_timeout);
+
+        if intermediate_result.is_err() {return intermediate_result.unwrap_err();}
+        let mut combine = intermediate_result.unwrap();
+        tracks.combine(&mut combine);
     }
 
-    let artists: ArtistsVec = PersonalizationData::Artists
+    let artists_result = PersonalizationData::Artists
         .get_data::<ArtistsVec>(&tokens, &artist_params)
         .await
-        .map_err(|e| {
-            error!("Could not get artist data: {}", e);
-            exit(1)
-        })
-        .unwrap();
+        .map_err(gateway_timeout);
+    if artists_result.is_err() {return artists_result.unwrap_err();}
+    let artists = artists_result.unwrap();
 
     let mut chart_data: Vec<String> = ChartBuilder::new(artists.clone(), tracks.clone())
         .get_charts()
