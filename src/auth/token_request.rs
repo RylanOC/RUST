@@ -3,12 +3,11 @@
 //! [spotifytops](https://github.com/lperson/spotifytops/blob/main/src/lib/spotify/auth/token_request.rs)
 
 use crate::auth::get_callback;
+use crate::auth::token_response::{TokenResponse, Tokens};
 use crate::env;
 use actix_web::client::Client;
 use actix_web::http::header;
 use actix_web::HttpResponse;
-use crate::auth::token_response::{Tokens, TokenResponse};
-
 
 /// Represents a request to Spotify to get an auth token.
 #[derive(Serialize, Debug, Clone)]
@@ -41,15 +40,14 @@ impl<'a> TokenRequest<'a> {
             .post("https://accounts.spotify.com/api/token")
             .header(header::CONTENT_TYPE, "application/x-www-form-urlencoded")
             .header(header::CONTENT_LENGTH, serialized_token_req.len())
-            .timeout(std::time::Duration::new(30,0))
+            .timeout(std::time::Duration::new(30, 0))
             .send_body(serialized_token_req)
             .await
-            .map_err(|e| {HttpResponse::GatewayTimeout().body(e.to_string())});
+            .map_err(|e| HttpResponse::GatewayTimeout().body(e.to_string()));
 
         if result.is_err() {
             Err(result.unwrap_err())
-        }
-        else {
+        } else {
             Ok(result
                 .unwrap()
                 .json::<TokenResponse>()
@@ -57,6 +55,5 @@ impl<'a> TokenRequest<'a> {
                 .unwrap()
                 .unwrap())
         }
-
     }
 }

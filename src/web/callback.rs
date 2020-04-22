@@ -26,7 +26,9 @@ pub async fn callback(
                 .unwrap();
 
             let response = TokenRequest::make_request(code).await;
-            if response.is_err() {return response.unwrap_err();}
+            if response.is_err() {
+                return response.unwrap_err();
+            }
             let tokens: Tokens = response.unwrap();
 
             // store the Spotify token in a cookie.
