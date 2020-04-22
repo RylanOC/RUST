@@ -57,6 +57,7 @@ impl<'a> ChartBuilder<'a> {
             artist_pop,
             "Artist Popularity",
             col.front().unwrap(),
+            "# of Artists",
         ));
 
         let temp = col.pop_front().unwrap();
@@ -97,6 +98,7 @@ impl<'a> ChartBuilder<'a> {
             acousticness,
             "Acousticness",
             col.front().unwrap(),
+            "# of Tracks",
         ));
         let temp = col.pop_front().unwrap();
         col.push_back(temp);
@@ -105,6 +107,7 @@ impl<'a> ChartBuilder<'a> {
             danceability,
             "Danceability",
             col.front().unwrap(),
+            "# of Tracks",
         ));
         let temp = col.pop_front().unwrap();
         col.push_back(temp);
@@ -113,6 +116,7 @@ impl<'a> ChartBuilder<'a> {
             energy,
             "Energy",
             col.front().unwrap(),
+            "# of Tracks",
         ));
         let temp = col.pop_front().unwrap();
         col.push_back(temp);
@@ -121,6 +125,7 @@ impl<'a> ChartBuilder<'a> {
             tempo,
             "Tempo",
             col.front().unwrap(),
+            "# of Tracks",
         ));
         let temp = col.pop_front().unwrap();
         col.push_back(temp);
@@ -129,6 +134,7 @@ impl<'a> ChartBuilder<'a> {
             mood,
             "Sad <-- Mood --> Happy",
             col.front().unwrap(),
+            "# of Tracks",
         ));
 
         let mut genre_vec: Vec<&chart_maker::BarchartDatum> = genre_map.values().clone().collect();
@@ -137,11 +143,11 @@ impl<'a> ChartBuilder<'a> {
 
         if genre_vec.len() > 10 {
             charts.push(
-                chart_maker::make_barchart(genre_vec[..10].to_vec(), &col, "Top 10 Genres")
+                chart_maker::make_barchart(genre_vec[..10].to_vec(), &col, "Top 10 Genres", "# of Artists")
                     .to_string(),
             );
         } else {
-            charts.push(chart_maker::make_barchart(genre_vec, &col, "Top 10 Genres").to_string());
+            charts.push(chart_maker::make_barchart(genre_vec, &col, "Top 10 Genres", "# of Artists").to_string());
         }
 
         return charts;
