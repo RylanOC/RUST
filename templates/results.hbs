@@ -26,11 +26,11 @@
                     onclick="musicSelection(id)">ARTISTS</button>
                 <button type="button" class="song music-button" id="song-music-button"
                     onclick="musicSelection(id)">SONGS</button>
-        </div>
+            </div>
         </div>
         <div class="curtain-text">
             <h3>Through what timeline:</h3>
-        
+
             <div class="btn">
                 <a href="/results?time=short">
                     <button type="button" class="short-term time-button" id="short-term-time-button"
@@ -47,7 +47,7 @@
             </div>
         </div>
 
-        <table id=artists>
+        <table id=artists style="display:none">
             <tr>
                 <th></th>
                 <th>Artist Name</th>
@@ -66,16 +66,15 @@
 
         </table>
 
-        <table id=tracks>
+        <table id=tracks style="display:none">
             <tr>
                 <th></th>
                 <th>Track Name</th>
+                <th>Popularity</th>
                 <th>Artist(s)</th>
                 <th>Album</th>
-                <th>Popularity</th>
-            </tr>
-            <!--TODO: style table-->
-            {{#each tracks.items}}
+                <!--TODO: style table-->
+                {{#each tracks.items}}
             <tr>
                 <td>{{@index}}.</td>
                 <td>{{this.name}}</td>
