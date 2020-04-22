@@ -45,6 +45,7 @@ function musicSelection(button_id) {
 
     var artist_table = document.getElementById("artists");
     var track_table = document.getElementById("tracks");
+    var chart_table = document.getElementById("charts");
 
     /* black out previously clicked buttons */
     if (button_id == "artist-music-button") {
@@ -52,12 +53,21 @@ function musicSelection(button_id) {
         document.getElementById("song-music-button").style.color = "black";
         artist_table.style.display = "block";
         track_table.style.display = "none";
+        chart_table.style.display = "none";
     }
     if (button_id == "song-music-button") {
         document.getElementById("artist-music-button").style.background = "#cfe8fa";
         document.getElementById("artist-music-button").style.color = "black";
         artist_table.style.display = "none";
+        chart_table.style.display = "none";
         track_table.style.display = "block";
+    }
+    if (button_id == "chart-music-button") {
+        document.getElementById("chart-music-button").style.background = "#cfe8fa";
+        document.getElementById("chart-music-button").style.color = "black";
+        artist_table.style.display = "none";
+        track_table.style.display = "none";
+        chart_table.style.display = "block";
     }
 
     /*  button_id looks like artist-music-button    */

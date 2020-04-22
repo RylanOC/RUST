@@ -26,6 +26,8 @@
                     onclick="musicSelection(id)">ARTISTS</button>
                 <button type="button" class="song music-button" id="song-music-button"
                     onclick="musicSelection(id)">SONGS</button>
+                <button type="button" class="charts music-button" id="chart-music-button"
+                    onclick="musicSelection(id)">VISUALIZATIONS</button>
             </div>
         </div>
         <div class="curtain-text">
@@ -104,7 +106,9 @@
         </div>
 
         <!-- Charts -->
-        {{{charts}}}
+        <div id="charts" style="display: none;">
+            {{{charts}}}
+        </div>
     </div>
 </body>
 
