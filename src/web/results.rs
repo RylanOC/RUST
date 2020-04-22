@@ -58,7 +58,7 @@ pub async fn results(
             }
         })
         .unwrap_or(TimeRange::MediumTerm);
-    
+
     let tokens: Tokens = opt.unwrap();
     let artist_params = PersonalizationParams::new()
         .limit(50)
@@ -76,8 +76,10 @@ pub async fn results(
         .get_data::<TracksVec>(&tokens, &track_params)
         .await
         .map_err(gateway_timeout);
-    if tracks_result.is_err() {return tracks_result.unwrap_err()}
-    let mut tracks= tracks_result.unwrap();
+    if tracks_result.is_err() {
+        return tracks_result.unwrap_err();
+    }
+    let mut tracks = tracks_result.unwrap();
 
     for i in 1..6 {
         let track_params = PersonalizationParams::new()
@@ -91,7 +93,9 @@ pub async fn results(
             .await
             .map_err(gateway_timeout);
 
-        if intermediate_result.is_err() {return intermediate_result.unwrap_err();}
+        if intermediate_result.is_err() {
+            return intermediate_result.unwrap_err();
+        }
         let mut combine = intermediate_result.unwrap();
         tracks.combine(&mut combine);
     }
@@ -100,7 +104,9 @@ pub async fn results(
         .get_data::<ArtistsVec>(&tokens, &artist_params)
         .await
         .map_err(gateway_timeout);
-    if artists_result.is_err() {return artists_result.unwrap_err();}
+    if artists_result.is_err() {
+        return artists_result.unwrap_err();
+    }
     let artists = artists_result.unwrap();
 
     let mut chart_data: Vec<String> = ChartBuilder::new(artists.clone(), tracks.clone())
