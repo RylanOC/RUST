@@ -12,18 +12,18 @@
         api_call: what ever the spotify api call is passed to 
                     somewhere else
 */
-    function loginSelection(button_id) {
-        /*  get the button, and change the color to show selection */
-        let selected_button = document.getElementById(button_id);
-        selected_button.style.background = "black";
-        selected_button.style.color = "#cfe8fa";
+function loginSelection(button_id) {
+    /*  get the button, and change the color to show selection */
+    let selected_button = document.getElementById(button_id);
+    selected_button.style.background = "black";
+    selected_button.style.color = "#cfe8fa";
 
-        /* on successful login, should changed to successfully logged in */
-        /*might need to implement alerts for if the user is trying to press
-            the music and time span buttons before logging in that just say like
-            'you need to login before we can show you your data'            */
+    /* on successful login, should changed to successfully logged in */
+    /*might need to implement alerts for if the user is trying to press
+        the music and time span buttons before logging in that just say like
+        'you need to login before we can show you your data'            */
 
-    }
+}
 
 /*  musicSelection
     a function to find out what music button was pressed
@@ -36,37 +36,28 @@
     @returns
         user_music_selection: the needed spotify term for what music 
                             was selected
-*/ 
+*/
 function musicSelection(button_id) {
     /*  get the button, and change the color to show selection */
     let selected_button = document.getElementById(button_id);
     selected_button.style.background = "black";
     selected_button.style.color = "#cfe8fa";
-    
+
+    var artist_table = document.getElementById("artists");
+    var track_table = document.getElementById("tracks");
+
     /* black out previously clicked buttons */
-    if (button_id == "artist-music-button" || 
-        button_id == "song-music-button" ||
-        button_id == "album-music-button" ) {
-        document.getElementById("genre-music-button").style.background = "#cfe8fa";
-        document.getElementById("genre-music-button").style.color = "black";    
-    }
-    if (button_id == "artist-music-button" || 
-        button_id == "song-music-button" ||
-        button_id == "genre-music-button" ) {
-        document.getElementById("album-music-button").style.background = "#cfe8fa";
-        document.getElementById("album-music-button").style.color = "black";
-    }
-    if (button_id == "artist-music-button" || 
-        button_id == "album-music-button" ||
-        button_id == "genre-music-button" ) {
+    if (button_id == "artist-music-button") {
         document.getElementById("song-music-button").style.background = "#cfe8fa";
         document.getElementById("song-music-button").style.color = "black";
+        artist_table.style.display = "block";
+        track_table.style.display = "none";
     }
-    if (button_id == "song-music-button" || 
-        button_id == "album-music-button" ||
-        button_id == "genre-music-button" ) {
+    if (button_id == "song-music-button") {
         document.getElementById("artist-music-button").style.background = "#cfe8fa";
         document.getElementById("artist-music-button").style.color = "black";
+        artist_table.style.display = "none";
+        track_table.style.display = "block";
     }
 
     /*  button_id looks like artist-music-button    */
@@ -75,6 +66,7 @@ function musicSelection(button_id) {
     /*  user_music_selection is just one word: artist, song, album, or genre */
     user_music_selection = selection_arr[0];
     console.log(user_music_selection);
+
 
     /* will need to return this information to send it somewhere */
 }
