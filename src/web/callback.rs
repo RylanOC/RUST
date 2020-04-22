@@ -1,5 +1,6 @@
 use crate::app::AppState;
 use crate::auth::token_request::TokenRequest;
+use crate::auth::token_response::Tokens;
 use crate::env;
 use crate::templates::Redirect;
 use crate::web::TOKENS_COOKIE_NAME;
@@ -8,7 +9,6 @@ use actix_web::http::header;
 use actix_web::http::Method;
 use actix_web::web::Data;
 use actix_web::{HttpRequest, HttpResponse};
-use std::process::exit;
 
 /// Resource GET by spotify login response
 pub async fn callback(
@@ -26,12 +26,10 @@ pub async fn callback(
                 .unwrap();
 
             let response = TokenRequest::make_request(code).await;
-            if response.is_error() {
-                error!(target: "RUST::callback", "Token Response body was error: {:?}",
-                       response.error.unwrap());
-                exit(1);
+            if response.is_err() {
+                return response.unwrap_err();
             }
-            let tokens = response.unwrap();
+            let tokens: Tokens = response.unwrap();
 
             // store the Spotify token in a cookie.
             session.set(TOKENS_COOKIE_NAME, tokens).unwrap();
