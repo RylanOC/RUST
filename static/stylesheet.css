@@ -98,8 +98,12 @@ p {
     font-size: 12pt; 
     color: #cfe8fa;
     margin: 0px;
-}   
+}
 
+tr:nth-child(even) {
+  background-color: #cfe8fa;
+  color: black;
+}
 
 /*  curtain is the class that holds all of 
     the body of the page   */ 

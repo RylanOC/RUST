@@ -28,9 +28,12 @@ pub fn make_barchart(
     data: Vec<&BarchartDatum>,
     col: &VecDeque<&str>,
     label: &str,
+    ylabel: &str,
 ) -> std::string::String {
     let mut colors: VecDeque<&str> = col.clone();
-    let mut v = CategoricalView::new().x_label(label.to_string());
+    let mut v = CategoricalView::new()
+        .x_label(label.to_string())
+        .y_label(ylabel.to_string());
 
     for datum in &data {
         let curr_color: &str = colors.pop_front().unwrap();
@@ -50,11 +53,11 @@ pub fn make_barchart(
         .to_string()
 }
 
-pub fn make_histogram(data: Vec<f64>, label: &str, color: &str) -> std::string::String {
+pub fn make_histogram(data: Vec<f64>, label: &str, color: &str, ylabel: &str,) -> std::string::String {
     let h = Histogram::from_slice(&data, HistogramBins::Count(20))
         .style(&BoxStyle::new().fill(color.to_string()));
 
-    let v = ContinuousView::new().add(h).x_label(label);
+    let v = ContinuousView::new().add(h).x_label(label).y_label(ylabel);
 
     Page::single(&v).to_svg().unwrap().to_string()
 }
