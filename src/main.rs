@@ -78,6 +78,7 @@ async fn main() -> io::Result<()> {
             )
             .default_service(a_web::route().to(p404::p404))
     })
+    .client_timeout(30 * 1000)
     .bind_openssl(&*env::ADDRESS, builder)?
     .run()
     .await
