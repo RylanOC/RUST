@@ -10,8 +10,7 @@ pub async fn is_up(req: HttpRequest, app_data: Data<AppState>) -> HttpResponse {
     match *req.method() {
         Method::GET => {
             let page = Curtain::new()
-                .title("Is RUST up?")
-                .subtitle("Yes it is!")
+                .title("Yes it is!")
                 .page_title("RUST")
                 .render(hbs_reg)
                 .unwrap();

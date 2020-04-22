@@ -69,12 +69,6 @@ impl Curtain {
         self
     }
 
-    /// Builder pattern function to set the subtitle in this curtain.
-    pub fn subtitle(mut self, sub: impl Into<String>) -> Self {
-        self.subtitle = sub.into();
-        self
-    }
-
     /// Builder pattern function to set the button in this curtain.
     pub fn with_login_button(mut self) -> Self {
         self.login_button = "true".to_string();
