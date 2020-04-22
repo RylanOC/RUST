@@ -20,32 +20,31 @@
             <img src="static/new_logo_music_note.png" class="results-icon">
         </div>
         <div class="curtain-text">
-            <br>
             <h3>See what you've been listening to:</h3>
+            <div class="btn">
+                <button type="button" class="artist music-button" id="artist-music-button"
+                    onclick="musicSelection(id)">ARTISTS</button>
+                <button type="button" class="song music-button" id="song-music-button"
+                    onclick="musicSelection(id)">SONGS</button>
         </div>
-        <div class="btn">
-            <button type="button" class="artist music-button" id="artist-music-button"
-                onclick="musicSelection(id)">ARTISTS</button>
-            <button type="button" class="song music-button" id="song-music-button"
-                onclick="musicSelection(id)">SONGS</button>
         </div>
         <div class="curtain-text">
-            <br>
             <h3>Through what timeline:</h3>
-        </div>
-        <div class="btn">
-            <a href="/results?time=short">
-                <button type="button" class="short-term time-button" id="short-term-time-button"
-                    onclick="timeSelection(id)">SHORT TERM</button>
-            </a>
-            <a href="/results?time=medium">
-                <button type="button" class="medium-term time-button" id="medium-term-time-button"
-                    onclick="timeSelection(id)">MEDIUM TERM</button>
-            </a>
-            <a href="/results?time=long">
-                <button type="button" class="long-term time-button" id="long-term-time-button"
-                    onclick="timeSelection(id)">LONG TERM</button>
-            </a>
+        
+            <div class="btn">
+                <a href="/results?time=short">
+                    <button type="button" class="short-term time-button" id="short-term-time-button"
+                        onclick="timeSelection(id)">SHORT TERM</button>
+                </a>
+                <a href="/results?time=medium">
+                    <button type="button" class="medium-term time-button" id="medium-term-time-button"
+                        onclick="timeSelection(id)">MEDIUM TERM</button>
+                </a>
+                <a href="/results?time=long">
+                    <button type="button" class="long-term time-button" id="long-term-time-button"
+                        onclick="timeSelection(id)">LONG TERM</button>
+                </a>
+            </div>
         </div>
 
         <table id=artists>
