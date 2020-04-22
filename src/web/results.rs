@@ -59,7 +59,7 @@ pub async fn results(
             }
         })
         .unwrap_or(TimeRange::MediumTerm);
-
+    
     let tokens: Tokens = opt.unwrap();
     let artist_params = PersonalizationParams::new()
         .limit(50)
