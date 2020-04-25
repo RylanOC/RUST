@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+pwd=$(echo $PWD)
+
+# client id = your spotify developer application client id
+# client secret = your spotify developer application secret MUST SET THIS
+# bind to = the ip address and port to host the website on. format as ip_addr:port
+# cert file = your openssl self signed cert file
+# priv key = your openssl self signed private key file
+CLIENT_ID=change-this-to-your-client-id \
+CLIENT_SECRET=change-this-to-your-client-secret \
+BIND_TO=localhost:8443 \
+CERT_FILE=cert.pem \
+PRIV_KEY=key.pem \
+$pwd/target/debug/rust-utilizing-spotify-tracker
