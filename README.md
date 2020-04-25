@@ -7,10 +7,12 @@
 Create a new app through the Spotify developer dashboard.
 
 - In the settings menu of your new Spotify app, add the following addresses to the Redirect URIs section:
-`https://127.0.0.1:8443`
-`https://127.0.0.1:8443/`
-`https://127.0.0.1:8443/callback`
-`https://127.0.0.1:8443/callback/`
+```
+https://127.0.0.1:8443
+https://127.0.0.1:8443/
+https://127.0.0.1:8443/callback
+https://127.0.0.1:8443/callback/
+```
 
 - Next, clone or download the RUST repo. In the "run_RUST" file, set the `CLIENT_ID` and `CLIENT_SECRET` to the id and secret from your Spotify app.
 
