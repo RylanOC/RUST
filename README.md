@@ -16,7 +16,7 @@ https://127.0.0.1:8443/callback/
 
 - Next, clone or download the RUST repo. In the "run_RUST" file, set the `CLIENT_ID` and `CLIENT_SECRET` to the id and secret from your Spotify app.
 
-- Install the development packages of OpenSSL. On Ubuntu:
+- Install the development packages of [OpenSSL](https://www.openssl.org/source/). On Ubuntu:
 `sudo apt install libssl-dev pkg-config`
 
 - Generate SSL keys with 
