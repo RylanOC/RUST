@@ -53,7 +53,12 @@ pub fn make_barchart(
         .to_string()
 }
 
-pub fn make_histogram(data: Vec<f64>, label: &str, color: &str, ylabel: &str,) -> std::string::String {
+pub fn make_histogram(
+    data: Vec<f64>,
+    label: &str,
+    color: &str,
+    ylabel: &str,
+) -> std::string::String {
     let h = Histogram::from_slice(&data, HistogramBins::Count(20))
         .style(&BoxStyle::new().fill(color.to_string()));
 

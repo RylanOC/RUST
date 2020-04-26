@@ -143,11 +143,19 @@ impl<'a> ChartBuilder<'a> {
 
         if genre_vec.len() > 10 {
             charts.push(
-                chart_maker::make_barchart(genre_vec[..10].to_vec(), &col, "Top 10 Genres", "# of Artists")
-                    .to_string(),
+                chart_maker::make_barchart(
+                    genre_vec[..10].to_vec(),
+                    &col,
+                    "Top 10 Genres",
+                    "# of Artists",
+                )
+                .to_string(),
             );
         } else {
-            charts.push(chart_maker::make_barchart(genre_vec, &col, "Top 10 Genres", "# of Artists").to_string());
+            charts.push(
+                chart_maker::make_barchart(genre_vec, &col, "Top 10 Genres", "# of Artists")
+                    .to_string(),
+            );
         }
 
         return charts;
